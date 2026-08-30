@@ -134,8 +134,9 @@
   .intro-slide.intro-framing .quote{ font-family:'Anton','Barlow Condensed',sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.01em; font-size:clamp(30px,5.2vw,58px); line-height:1.08; max-width:920px; }
   .intro-slide.intro-closing .quote{
     font-family:'Anton','Barlow Condensed',sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.005em;
-    font-size:clamp(34px,6vw,68px); line-height:1.1; max-width:1000px; color:var(--text);
+    font-size:clamp(26px,4.2vw,46px); line-height:1.15; max-width:900px; color:var(--text);
   }
+  .intro-slide.quote-compact .quote{ font-size:clamp(20px,2.6vw,26px); max-width:760px; }
   .intro-progress{ position:fixed; bottom:26px; left:50%; transform:translateX(-50%); display:flex; gap:6px; z-index:5001; }
   .intro-progress .dot{ width:26px; height:3px; border-radius:2px; background:rgba(255,255,255,0.2); overflow:hidden; position:relative; }
   .intro-progress .dot .fill{ position:absolute; inset:0; width:0%; background:var(--blue); }
@@ -156,10 +157,10 @@
     <div class="quote">Why is human oversight necessary?</div>
   </div>
 
-  <div class="intro-slide" data-accent="var(--amber)">
-    <div class="domain">Case 1 of 4 &middot; Criminal Justice &middot; COMPAS Recidivism Algorithm</div>
-    <div class="quote">A machine-learning algorithm scored defendants' risk of reoffending — nearly twice as likely to wrongly flag Black defendants as high-risk. Nobody had checked the model for that bias before judges started relying on it.</div>
-    <div class="source">— ProPublica, &ldquo;Machine Bias,&rdquo; 2016</div>
+  <div class="intro-slide" data-accent="var(--cyan)">
+    <div class="domain">Case 1 of 4 &middot; Military &middot; "Lavender" AI Targeting System, Gaza</div>
+    <div class="quote">Israel's military reportedly used an AI system called Lavender to mark tens of thousands of Palestinians as targets, with officers spending as little as 20 seconds per name — often just confirming the target was male — before authorizing a strike.</div>
+    <div class="source">— +972 Magazine / Local Call investigation, 2024</div>
   </div>
 
   <div class="intro-slide" data-accent="var(--purple)">
@@ -168,10 +169,10 @@
     <div class="source">— Dutch parliamentary inquiry report, 2020</div>
   </div>
 
-  <div class="intro-slide" data-accent="var(--cyan)">
-    <div class="domain">Case 3 of 4 &middot; Military &middot; "Lavender" AI Targeting System, Gaza</div>
-    <div class="quote">Israel's military reportedly used an AI system called Lavender to mark tens of thousands of Palestinians as targets, with officers spending as little as 20 seconds per name — often just confirming the target was male — before authorizing a strike.</div>
-    <div class="source">— +972 Magazine / Local Call investigation, 2024</div>
+  <div class="intro-slide" data-accent="var(--amber)">
+    <div class="domain">Case 3 of 4 &middot; Criminal Justice &middot; COMPAS Recidivism Algorithm</div>
+    <div class="quote">A machine-learning algorithm scored defendants' risk of reoffending — nearly twice as likely to wrongly flag Black defendants as high-risk. Nobody had checked the model for that bias before judges started relying on it.</div>
+    <div class="source">— ProPublica, &ldquo;Machine Bias,&rdquo; 2016</div>
   </div>
 
   <div class="intro-slide" data-accent="var(--blue)">
@@ -180,15 +181,15 @@
     <div class="source">— CNBC / Ofqual results data, 2020</div>
   </div>
 
-  <div class="intro-slide" data-accent="var(--green)">
+  <div class="intro-slide quote-compact" data-accent="var(--green)" data-hold="1900">
     <div class="domain">The law &middot; EU AI Act, Article 14</div>
-    <div class="quote">The EU AI Act now requires high-risk AI systems to be designed so they "can be effectively overseen by natural persons" — but leaves who watches, when they check, and what triggers a stop entirely up to whoever writes the policy.</div>
+    <div class="quote">High-risk AI must be "effectively overseen by natural persons." The law doesn't say who, how often, or what stops it.</div>
     <div class="source">— Regulation (EU) 2024/1689, Article 14, Human Oversight</div>
   </div>
 
-  <div class="intro-slide intro-closing" data-accent="var(--amber)">
+  <div class="intro-slide intro-closing" data-accent="var(--amber)" data-hold="1900">
     <div class="domain">The gap</div>
-    <div class="quote">The law says "effectively overseen." It doesn't say by whom, how often, or at what threshold — and that's exactly where these four cases fell through. Signal Check reads your policy and tells you if it would too.</div>
+    <div class="quote">The law doesn't say how. That's the gap Signal Check checks for.</div>
   </div>
 
   <div class="intro-progress" id="introProgress"></div>
@@ -407,7 +408,8 @@
 
     if(dot){ gsap.to(dot, { width:'100%', duration:0.3, ease:'power1.out' }); }
 
-    await wait(isBookend ? 900 : 550);
+    var customHold = parseInt(slide.getAttribute('data-hold'), 10);
+    await wait(customHold || (isBookend ? 900 : 550));
     if(cancelled) return;
 
     await tween(slide, { opacity:1 }, { opacity:0, duration:0.35, ease:'power1.in' });
