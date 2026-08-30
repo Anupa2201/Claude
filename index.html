@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Oversight Signal Test</title>
-<meta name="description" content="Paste your human-oversight definition and watch it survive — or fail — four realistic AI-incident scenarios. An automated keyword scan, not a legal audit.">
+<title>Signal Check</title>
+<meta name="description" content="Test whether your human oversight clause survives contact with reality - before an incident does. An automated keyword scan, not a legal audit.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#08090D; --panel:#141A22; --panel-soft:#10151C; --edge:#232B36; --text:#EAF0F6; --dim:#8B97A8;
-    --blue:#4E7FFF; --purple:#A855F7; --cyan:#22D3EE; --green:#34D399; --amber:#E8B93D; --red:#E1594A;
+    --bg:#07080C; --panel:#12161D; --panel-soft:#0D1116; --edge:#232B36; --text:#EEF2F7; --dim:#8B97A8;
+    --blue:#5B7CFA; --purple:#A855F7; --pink:#EC4899; --cyan:#22D3EE; --green:#34D399; --amber:#E8B93D; --red:#F0576B;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth; background:var(--bg);}
@@ -25,45 +25,49 @@
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     opacity:0.20;
   }
+  .display{ font-family:'Anton', 'Barlow Condensed', sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.01em; }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
   h1,h2,h3{ font-family:'Barlow Condensed', sans-serif; font-weight:700; margin:0; }
-  .eyebrow-label{ font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:var(--blue); }
+  .eyebrow-label{ font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:12px; text-transform:uppercase; letter-spacing:0.1em; color:var(--blue); display:inline-flex; align-items:center; gap:10px; }
+  .eyebrow-label .dash{ width:22px; height:2px; background:var(--blue); display:inline-block; }
   a{ color:inherit; }
   .shell{ max-width:1120px; margin:0 auto; padding:0 24px; }
 
   /* ---------- NAV ---------- */
-  .nav{ display:flex; align-items:center; justify-content:space-between; padding:20px 24px; max-width:1120px; margin:0 auto; }
-  .nav .brand{ font-family:'Barlow Condensed', sans-serif; font-weight:700; font-size:19px; letter-spacing:0.01em; }
-  .nav .brand span{ background:linear-gradient(90deg, var(--blue), var(--purple)); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  .nav-cta{ font-family:'Barlow Condensed',sans-serif; font-weight:600; letter-spacing:0.02em; font-size:13px; border:1px solid var(--edge); border-radius:6px; padding:8px 15px; text-decoration:none; }
-  .nav-cta:hover{ border-color:var(--blue); }
+  .nav{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:20px 24px; max-width:1120px; margin:0 auto; position:relative; z-index:1; }
+  .nav .brand{ font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:13px; letter-spacing:0.14em; text-decoration:none; display:inline-flex; align-items:center; gap:8px; justify-self:center; }
+  .nav .brand .dot{ width:7px; height:7px; border-radius:50%; background:var(--blue); box-shadow:0 0 8px var(--blue); }
+  .nav-cta{ font-family:'IBM Plex Mono',monospace; font-weight:500; letter-spacing:0.04em; font-size:12.5px; text-decoration:none; color:var(--dim); justify-self:end; }
+  .nav-cta:hover{ color:var(--text); }
 
   /* ---------- HERO ---------- */
-  .hero{ position:relative; overflow:hidden; padding:70px 24px 90px;
+  .hero{ position:relative; padding:70px 24px 90px;
     background:
-      radial-gradient(ellipse 640px 520px at 82% 0%, rgba(168,85,247,0.26), transparent 62%),
-      radial-gradient(ellipse 580px 480px at 6% 34%, rgba(78,127,255,0.22), transparent 62%),
-      radial-gradient(ellipse 460px 420px at 46% 92%, rgba(34,211,238,0.14), transparent 62%),
-      radial-gradient(ellipse 520px 420px at 60% 100%, rgba(52,211,153,0.10), transparent 62%);
+      radial-gradient(ellipse 640px 520px at 82% 0%, rgba(168,85,247,0.22), transparent 62%),
+      radial-gradient(ellipse 580px 480px at 6% 34%, rgba(78,127,255,0.18), transparent 62%),
+      radial-gradient(ellipse 460px 420px at 46% 92%, rgba(34,211,238,0.12), transparent 62%);
   }
-  #heroLottie{ position:absolute; top:50%; right:-8%; width:680px; height:680px; transform:translateY(-50%); opacity:0.9; pointer-events:none; }
-  @media (max-width:760px){ #heroLottie{ opacity:0.55; right:-32%; width:520px; height:520px; } }
   .hero-inner{ position:relative; z-index:1; max-width:1120px; margin:0 auto; }
-  .hero-eyebrow{ display:flex; align-items:center; gap:8px; margin-bottom:18px; }
-  .hero-eyebrow .dot{ width:7px; height:7px; border-radius:50%; background:var(--blue); box-shadow:0 0 10px var(--blue); animation:blink 1.6s ease-in-out infinite; }
-  @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
-  .hero h1{ font-size:clamp(36px,6vw,64px); line-height:1.02; max-width:640px; }
-  .hero h1 em{ font-style:normal; background:linear-gradient(90deg, var(--blue), var(--purple)); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  .hero .pitch{ font-size:16px; line-height:1.6; color:var(--dim); max-width:480px; margin:20px 0 30px; }
-  .btn{ font-family:'Barlow Condensed', sans-serif; font-weight:600; font-size:17px; letter-spacing:0.02em; text-transform:uppercase; background:linear-gradient(135deg, var(--blue), var(--purple)); color:#080A0F; border:none; border-radius:7px; padding:14px 26px; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; }
+  .hero-mascot{ position:absolute; top:6px; right:0; width:200px; height:200px; z-index:1; animation:mascotFloat 5s ease-in-out infinite; }
+  .hero-mascot .spark{ transform-origin:center; animation:mascotTwinkle 2.4s ease-in-out infinite; }
+  .hero-mascot .spark:nth-child(2){ animation-delay:0.5s; }
+  .hero-mascot .spark:nth-child(3){ animation-delay:1s; }
+  @keyframes mascotFloat{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } }
+  @keyframes mascotTwinkle{ 0%,100%{ opacity:0.35; transform:scale(0.8); } 50%{ opacity:1; transform:scale(1.15); } }
+  @media (max-width:900px){ .hero-mascot{ display:none; } }
+  .hero h1{ font-size:clamp(40px,7vw,76px); line-height:0.98; margin:22px 0 24px; }
+  .hero h1 .grad{ background:linear-gradient(90deg, var(--blue), var(--purple), var(--pink)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero .pitch{ font-size:16px; line-height:1.65; color:var(--dim); max-width:520px; margin:0 0 34px; }
+  .btn{ font-family:'Barlow Condensed', sans-serif; font-weight:700; font-size:16px; letter-spacing:0.03em; text-transform:uppercase; background:linear-gradient(90deg, var(--blue), var(--purple), var(--pink)); color:#080A0F; border:none; border-radius:8px; padding:15px 28px; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; }
   .btn:hover{ filter:brightness(1.08); }
   .btn.secondary{ background:transparent; color:var(--text); border:1.5px solid var(--edge); }
-  .btn-row{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
-  .btn-row .fine{ font-size:11.5px; color:var(--dim); }
+  .btn-row{ display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
+  .btn-row .fine{ font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--dim); }
 
   /* ---------- WHY ---------- */
   .why{ padding:60px 24px; border-top:1px solid var(--edge); border-bottom:1px solid var(--edge); background:var(--panel); }
   .why-inner{ max-width:1120px; margin:0 auto; display:grid; grid-template-columns:200px 1fr; gap:36px; align-items:start; }
-  .why h2{ font-size:27px; }
+  .why h2{ font-size:27px; line-height:1.2; }
   .why p{ font-size:15px; line-height:1.75; color:var(--text); max-width:640px; }
   .why p + p{ margin-top:14px; color:var(--dim); }
 
@@ -72,62 +76,177 @@
   .how-head{ text-align:left; margin-bottom:36px; }
   .how h2{ font-size:29px; margin-bottom:8px; }
   .how-head p{ color:var(--dim); font-size:14px; max-width:520px; }
-  .steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
-  @media (max-width:820px){ .steps{ grid-template-columns:repeat(2,1fr); } .why-inner{ grid-template-columns:1fr; } }
+  .steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; position:relative; }
+  @media (max-width:820px){ .steps{ grid-template-columns:repeat(2,1fr); gap:18px; } .why-inner{ grid-template-columns:1fr; } }
   @media (max-width:520px){ .steps{ grid-template-columns:1fr; } }
-  .step{ background:var(--panel); border:1px solid var(--edge); border-radius:10px; padding:20px 18px; position:relative; }
-  .step .num{ font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:30px; background:linear-gradient(135deg, var(--blue), var(--purple)); -webkit-background-clip:text; background-clip:text; color:transparent; line-height:1; opacity:0.85; }
-  .step svg{ display:block; margin:10px 0 14px; }
-  .step h3{ font-size:17.5px; margin-bottom:8px; }
+  .step{ background:var(--panel); border:1px solid var(--edge); padding:22px 20px; position:relative; }
+  .steps .step:first-child{ border-radius:10px 0 0 10px; }
+  .steps .step:last-child{ border-radius:0 10px 10px 0; }
+  @media (max-width:820px){ .steps .step{ border-radius:10px !important; } }
+  .step .num{ font-family:'IBM Plex Mono',monospace; font-weight:500; font-size:22px; color:var(--dim); line-height:1; }
+  .step .num-dash{ width:18px; height:2px; background:var(--blue); margin:10px 0 16px; }
+  .step h3{ font-size:16.5px; margin-bottom:8px; font-weight:600; }
   .step p{ font-size:12.5px; line-height:1.55; color:var(--dim); margin:0; }
-  .step-arrow{ position:absolute; top:50%; right:-14px; transform:translateY(-50%); color:var(--edge); font-size:16px; }
+  .step-arrow{ position:absolute; top:50%; right:-13px; transform:translateY(-50%); width:26px; height:26px; border-radius:50%; background:var(--bg); border:1px solid var(--edge); display:flex; align-items:center; justify-content:center; color:var(--dim); font-size:13px; z-index:1; }
   @media (max-width:820px){ .step-arrow{ display:none; } }
 
   /* ---------- LAUNCH ---------- */
-  .launch{ padding:70px 24px 90px; border-top:1px solid var(--edge);
-    background:
-      radial-gradient(ellipse 500px 400px at 20% 100%, rgba(78,127,255,0.10), transparent 60%),
-      radial-gradient(ellipse 500px 400px at 90% 0%, rgba(52,211,153,0.08), transparent 60%),
-      var(--bg);
-  }
-  .launch-card{ max-width:1120px; margin:0 auto; background:var(--panel); border:1px solid var(--edge); border-radius:12px; padding:40px; display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap; }
-  .launch-card h2{ font-size:27px; margin-bottom:8px; }
-  .launch-card p{ color:var(--dim); font-size:13.5px; max-width:420px; margin:0; }
+  .launch{ padding:60px 24px 40px; display:flex; flex-direction:column; align-items:center; text-align:center; }
+  .launch .btn.secondary{ font-size:15px; padding:14px 30px; }
+  .launch .brandmark{ margin-top:34px; font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:12px; letter-spacing:0.14em; color:var(--dim); display:inline-flex; align-items:center; gap:8px; }
+  .launch .brandmark .dot{ width:6px; height:6px; border-radius:50%; background:var(--blue); }
 
   /* ---------- FOOTER ---------- */
-  footer{ padding:28px 24px 40px; border-top:1px solid var(--edge); }
-  .footer-inner{ max-width:1120px; margin:0 auto; }
-  .footer-caveat{ background:rgba(232,185,61,0.09); border:1px solid rgba(232,185,61,0.35); color:var(--amber); font-size:11.5px; padding:10px 14px; border-radius:6px; line-height:1.55; margin-bottom:16px; max-width:720px; }
-  .footer-meta{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:11px; color:var(--dim); }
+  footer{ padding:24px 24px 40px; border-top:1px solid var(--edge); }
+  .footer-inner{ max-width:1120px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; }
+  .footer-meta{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.06em; color:var(--dim); text-transform:uppercase; }
+  .footer-caveat{ background:rgba(232,185,61,0.09); border:1px solid rgba(232,185,61,0.3); color:var(--amber); font-size:11.5px; padding:8px 13px; border-radius:20px; line-height:1.4; display:flex; gap:7px; align-items:center; }
+
+  /* ---------- INTRO SEQUENCE ---------- */
+  body.intro-active{ overflow:hidden; height:100vh; }
+  #intro{
+    position:fixed; inset:0; z-index:5000; background:var(--bg); overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  #introOrb{
+    position:absolute; top:50%; left:50%; width:min(1100px,130vw); height:min(1100px,130vw);
+    transform:translate(-50%,-50%); object-fit:contain; z-index:0;
+    mix-blend-mode:screen; opacity:0.85; filter:blur(2px);
+  }
+  #introOverlay{
+    position:absolute; inset:0; z-index:1;
+    background:radial-gradient(ellipse 60% 55% at 50% 50%, rgba(7,8,12,0.25), rgba(7,8,12,0.82) 75%);
+  }
+  #introSkip{
+    position:fixed; top:22px; right:24px; z-index:5001;
+    font-family:'IBM Plex Mono',monospace; font-weight:500; font-size:12.5px; letter-spacing:0.06em;
+    color:var(--dim); text-decoration:none; border:1px solid var(--edge); border-radius:6px; padding:8px 14px;
+    background:rgba(7,8,12,0.6);
+  }
+  #introSkip:hover{ color:var(--text); border-color:var(--blue); }
+  .intro-slide{
+    position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:0 24px; opacity:0; visibility:hidden;
+  }
+  .intro-slide .domain{ font-family:'IBM Plex Mono',monospace; font-weight:500; font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--intro-accent, var(--blue)); margin-bottom:26px; opacity:0; }
+  .intro-slide .quote{ font-family:'Barlow',sans-serif; font-weight:500; font-size:clamp(22px,3.1vw,32px); line-height:1.5; max-width:880px; margin:0 0 26px; color:var(--text); min-height:1.5em; }
+  .intro-slide .source{ font-family:'IBM Plex Mono',monospace; font-size:14px; color:var(--dim); letter-spacing:0.02em; opacity:0; }
+  .intro-slide.intro-framing .quote{ font-family:'Anton','Barlow Condensed',sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.01em; font-size:clamp(30px,5.2vw,58px); line-height:1.08; max-width:920px; }
+  .intro-slide.intro-closing .quote{
+    font-family:'Anton','Barlow Condensed',sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.005em;
+    font-size:clamp(26px,4.2vw,46px); line-height:1.15; max-width:900px; color:var(--text);
+  }
+  .intro-progress{ position:fixed; bottom:26px; left:50%; transform:translateX(-50%); display:flex; gap:6px; z-index:5001; }
+  .intro-progress .dot{ width:26px; height:3px; border-radius:2px; background:rgba(255,255,255,0.2); overflow:hidden; position:relative; }
+  .intro-progress .dot .fill{ position:absolute; inset:0; width:0%; background:var(--blue); }
 </style>
 </head>
 <body>
 
+<div id="intro">
+  <video id="introOrb" autoplay loop muted playsinline preload="auto">
+    <source src="assets/video/intro-orb.mp4" type="video/mp4">
+    <source src="assets/video/intro-orb.webm" type="video/webm">
+  </video>
+  <div id="introOverlay"></div>
+  <a id="introSkip" href="javascript:void(0)" onclick="skipIntro()">Skip &rarr;</a>
+
+  <div class="intro-slide intro-framing" data-accent="var(--blue)">
+    <div class="domain">Before we start</div>
+    <div class="quote">Why is human oversight necessary?</div>
+  </div>
+
+  <div class="intro-slide" data-accent="var(--cyan)">
+    <div class="domain">Case 1 of 4 &middot; Military &middot; "Lavender" AI Targeting System, Gaza</div>
+    <div class="quote">Israel's military reportedly used an AI system called Lavender to mark tens of thousands of Palestinians as targets, with officers spending as little as 20 seconds per name - often just confirming the target was male - before authorizing a strike.</div>
+    <div class="source">+972 Magazine / Local Call investigation, 2024</div>
+  </div>
+
+  <div class="intro-slide" data-accent="var(--purple)">
+    <div class="domain">Case 2 of 4 &middot; Welfare &amp; Tax &middot; Dutch Childcare Benefits Scandal</div>
+    <div class="quote">A self-learning algorithm flagged parents as fraud risks, using dual nationality as a signal. Over 26,000 families were wrongly accused, plunged into debt, and in more than 1,600 cases had their children taken into foster care.</div>
+    <div class="source">Dutch parliamentary inquiry report, 2020</div>
+  </div>
+
+  <div class="intro-slide" data-accent="var(--amber)">
+    <div class="domain">Case 3 of 4 &middot; Criminal Justice &middot; COMPAS Recidivism Algorithm</div>
+    <div class="quote">A machine-learning algorithm scored defendants' risk of reoffending - nearly twice as likely to wrongly flag Black defendants as high-risk. Nobody had checked the model for that bias before judges started relying on it.</div>
+    <div class="source">ProPublica, &ldquo;Machine Bias,&rdquo; 2016</div>
+  </div>
+
+  <div class="intro-slide" data-accent="var(--blue)">
+    <div class="domain">Case 4 of 4 &middot; Education &middot; UK A-level Grading Algorithm, 2020</div>
+    <div class="quote">With exams cancelled in 2020, Ofqual used an algorithm to calculate final grades instead of trusting teachers. Nearly 40% of results were downgraded - hitting state school students hardest, with no real way to challenge a grade before it cost someone their place.</div>
+    <div class="source">CNBC / Ofqual results data, 2020</div>
+  </div>
+
+  <div class="intro-slide" data-accent="var(--green)" data-hold="1900">
+    <div class="domain">The law &middot; EU AI Act, Article 14</div>
+    <div class="quote">The EU AI Act now requires high-risk AI systems to be designed so they "can be effectively overseen by natural persons" - but leaves who watches, when they check, and what triggers a stop entirely up to whoever writes the policy.</div>
+    <div class="source">Regulation (EU) 2024/1689, Article 14, Human Oversight</div>
+  </div>
+
+  <div class="intro-slide intro-closing" data-accent="var(--amber)" data-hold="1900">
+    <div class="domain">The gap</div>
+    <div class="quote">Governments recognize human oversight is needed - they just don't specify how it works.</div>
+  </div>
+
+  <div class="intro-progress" id="introProgress"></div>
+</div>
+
 <nav class="nav">
-  <div class="brand">OVERSIGHT<span>::</span>SIGNAL</div>
-  <a class="nav-cta" href="tool.html">Open the tool &rarr;</a>
+  <span></span>
+  <a class="brand" href="index.html"><span class="dot"></span>SIGNAL CHECK</a>
+  <a class="nav-cta" href="tool.html">OPEN TOOL &rarr;</a>
 </nav>
 
 <section class="hero">
-  <div id="heroLottie"></div>
   <div class="hero-inner">
-    <div class="hero-eyebrow"><span class="dot"></span><span class="eyebrow-label">Automated keyword scan &middot; UK oversight-language gap</span></div>
-    <h1>Does your oversight clause actually reach a <em>human</em>?</h1>
-    <p class="pitch">Paste your draft "human oversight" definition. We run it through four realistic AI-incident scenarios and show you, gate by gate, whether the signal gets through — or dies somewhere between WHO, WHEN and HOW.</p>
+    <svg class="hero-mascot" viewBox="0 0 200 200" aria-hidden="true">
+      <defs>
+        <linearGradient id="botGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" style="stop-color:var(--blue)"/>
+          <stop offset="55%" style="stop-color:var(--purple)"/>
+          <stop offset="100%" style="stop-color:var(--pink)"/>
+        </linearGradient>
+      </defs>
+      <path class="spark" d="M30 26 L34 34 L42 38 L34 42 L30 50 L26 42 L18 38 L26 34 Z" fill="var(--blue)"/>
+      <path class="spark" d="M168 46 L171 52 L177 55 L171 58 L168 64 L165 58 L159 55 L165 52 Z" fill="var(--pink)"/>
+      <path class="spark" d="M150 20 L152 25 L157 27 L152 29 L150 34 L148 29 L143 27 L148 25 Z" fill="var(--purple)"/>
+      <rect x="28" y="72" width="28" height="22" rx="6" fill="url(#botGrad)"/>
+      <rect x="144" y="72" width="28" height="22" rx="6" fill="url(#botGrad)"/>
+      <rect x="55" y="40" width="90" height="110" rx="16" fill="url(#botGrad)"/>
+      <g fill="#fff">
+        <rect x="74" y="64" width="16" height="6" rx="2"/>
+        <rect x="74" y="64" width="6" height="18" rx="2"/>
+        <rect x="110" y="64" width="16" height="6" rx="2"/>
+        <rect x="120" y="64" width="6" height="18" rx="2"/>
+      </g>
+      <path d="M78,110 Q100,130 122,110" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <g fill="url(#botGrad)">
+        <rect x="66" y="150" width="13" height="28" rx="4"/>
+        <rect x="82" y="150" width="13" height="28" rx="4"/>
+        <rect x="105" y="150" width="13" height="28" rx="4"/>
+        <rect x="121" y="150" width="13" height="28" rx="4"/>
+      </g>
+    </svg>
+    <span class="eyebrow-label"><span class="dash"></span>POLICY DIAGNOSTIC TOOL &middot; AI SAFETY</span>
+    <h1 class="display">Does your<br>definition<br><span class="grad">actually work?</span></h1>
+    <p class="pitch">Test whether your human oversight clause survives contact with reality - before an incident does.</p>
     <div class="btn-row">
-      <a class="btn" href="tool.html">Run the Signal Test &rarr;</a>
-      <a class="btn secondary" href="#how">See how it works</a>
+      <a class="btn" href="tool.html">Run the Signal Test</a>
+      <span class="fine">~3 minutes &middot; no account required</span>
     </div>
   </div>
 </section>
 
 <section class="why">
   <div class="why-inner">
-    <div class="eyebrow-label" style="padding-top:4px;">Why this exists</div>
+    <div class="eyebrow-label" style="padding-top:4px;"><span class="dash"></span>WHY THIS EXISTS</div>
     <div>
-      <h2>"Human oversight" is doing a lot of unexamined work.</h2>
-      <p>UK AI policy leans heavily on cross-sectoral language like "meaningful human review" or "appropriate safeguards," and leaves the specifics — who reviews, when, and with what authority — to be filled in ad hoc, sector by sector.</p>
-      <p>That ambiguity is invisible on paper. A clause can read as responsible in a policy document while still letting a real incident slip past every checkpoint it was meant to catch. This tool exists to surface that gap before an incident does.</p>
+      <h2>The gap between regulatory language and practical implementation</h2>
+      <p style="margin-top:16px;">Most oversight definitions sound plausible in a document. They name values, invoke principles, and gesture toward accountability. But when an AI system behaves unexpectedly, definitions are stress-tested in ways their authors never imagined.</p>
+      <p>Signal Check asks four concrete questions of any definition: Who is the human in the loop? When do they look? How would they know something is wrong? And can they actually do anything about it?</p>
     </div>
   </div>
 </section>
@@ -135,73 +254,177 @@
 <section class="how" id="how">
   <div class="shell">
     <div class="how-head">
-      <div class="eyebrow-label" style="margin-bottom:8px;">Process</div>
-      <h2>How it works</h2>
-      <p>Four steps, no sign-up, nothing stored server-side. Everything runs in your browser.</p>
+      <div class="eyebrow-label" style="margin-bottom:10px;"><span class="dash"></span>HOW IT WORKS</div>
     </div>
     <div class="steps">
       <div class="step">
         <div class="num">01</div>
-        <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><rect x="6" y="3" width="18" height="24" rx="2" stroke="#4E7FFF" stroke-width="1.6"/><path d="M10 10h10M10 15h10M10 20h6" stroke="#4E7FFF" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <div class="num-dash"></div>
         <h3>Paste your definition</h3>
-        <p>Drop in your working draft of a human-oversight clause — as rough or polished as it currently is.</p>
-        <span class="step-arrow">&rarr;</span>
+        <p>Input your draft human oversight clause - a sentence, a paragraph, or a full section.</p>
+        <span class="step-arrow">&rsaquo;</span>
       </div>
       <div class="step">
         <div class="num">02</div>
-        <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><circle cx="13" cy="13" r="9" stroke="#A855F7" stroke-width="1.6"/><path d="M19.5 19.5L26 26" stroke="#A855F7" stroke-width="1.6" stroke-linecap="round"/><path d="M13 8v10M8 13h10" stroke="#4E7FFF" stroke-width="1.3" stroke-dasharray="1.5 2.2"/></svg>
-        <h3>Automated keyword scan</h3>
-        <p>Checked against 7 criteria: named role, review timing, threshold, authority, scope, materiality, audit trail.</p>
-        <span class="step-arrow">&rarr;</span>
+        <div class="num-dash"></div>
+        <h3>Run four scenarios</h3>
+        <p>The tool walks each definition through four realistic AI incident cases.</p>
+        <span class="step-arrow">&rsaquo;</span>
       </div>
       <div class="step">
         <div class="num">03</div>
-        <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><circle cx="5" cy="15" r="2.4" fill="#4E7FFF"/><circle cx="15" cy="15" r="2.4" stroke="#A855F7" stroke-width="1.6"/><circle cx="25" cy="15" r="2.4" stroke="#4E7FFF" stroke-width="1.6"/><path d="M7.4 15h5.2M17.4 15h5.2" stroke="#4A5566" stroke-width="1.4" stroke-dasharray="2 2"/></svg>
-        <h3>Walk 4 incident scenarios</h3>
-        <p>Watch the signal travel through WHO &rarr; WHEN &rarr; HOW gates, dimming wherever your definition falls short.</p>
-        <span class="step-arrow">&rarr;</span>
+        <div class="num-dash"></div>
+        <h3>Watch the signal</h3>
+        <p>See where oversight breaks down: who misses it, when it slips, how detection fails.</p>
+        <span class="step-arrow">&rsaquo;</span>
       </div>
       <div class="step">
         <div class="num">04</div>
-        <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><path d="M6 8h18M6 15h18M6 22h12" stroke="#4A5566" stroke-width="1.6" stroke-linecap="round"/><circle cx="24" cy="22" r="4.5" stroke="#34D399" stroke-width="1.6"/><path d="M22.3 22l1.2 1.3 2.3-2.6" stroke="#34D399" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <h3>Get a scored checklist</h3>
-        <p>Auto-scored from the same scan, with concrete fixes for each gap. Download the full report as text.</p>
+        <div class="num-dash"></div>
+        <h3>Receive a scored report</h3>
+        <p>Seven-point checklist with specific language fixes you can act on immediately.</p>
       </div>
     </div>
   </div>
 </section>
 
 <section class="launch">
-  <div class="launch-card">
-    <div>
-      <h2>Ready to test your clause?</h2>
-      <p>Takes about two minutes. The tool runs entirely client-side — nothing you paste is sent anywhere.</p>
-    </div>
-    <a class="btn" href="tool.html">Run the Signal Test &rarr;</a>
-  </div>
+  <a class="btn secondary" href="tool.html">Get Started</a>
+  <div class="brandmark"><span class="dot"></span>SIGNAL CHECK</div>
 </section>
 
 <footer>
   <div class="footer-inner">
-    <div class="footer-caveat">This is an automated keyword scan of your text — a first-pass signal, not a definitive legal or policy audit. Scenarios are fictionalized for illustration. Verify findings manually before relying on them.</div>
-    <div class="footer-meta">
-      <span>Oversight Signal Test &mdash; built for a one-day AI safety hackathon.</span>
-      <span><a href="tool.html">Open the tool</a></span>
-    </div>
+    <span class="footer-meta">Signal Check &middot; AI Safety Diagnostic</span>
+    <div class="footer-caveat">&#9888; <b>Automated keyword scan</b> - a first-pass signal, not a definitive audit.</div>
   </div>
 </footer>
 
-<script src="assets/vendor/lottie-light.min.js"></script>
+<script src="assets/vendor/gsap.min.js"></script>
 <script>
-  try{
-    lottie.loadAnimation({
-      container: document.getElementById('heroLottie'),
-      renderer: 'svg',
-      loop: true,
-      autoplay: true,
-      path: 'assets/hero-signal.json'
+(function(){
+  var SEEN_KEY = 'signalCheckIntroSeen';
+  var introEl = document.getElementById('intro');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.intro-slide'));
+  var progressWrap = document.getElementById('introProgress');
+  var body = document.body;
+  var finished = false;
+  var cancelled = false;
+  var activeTween = null;
+
+  var alreadySeen = false;
+  try{ alreadySeen = sessionStorage.getItem(SEEN_KEY) === '1'; }catch(e){}
+
+  if(!introEl || !slides.length || alreadySeen || typeof gsap === 'undefined'){
+    if(introEl) introEl.style.display = 'none';
+    return;
+  }
+
+  body.classList.add('intro-active');
+  var introOrb = document.getElementById('introOrb');
+  if(introOrb){
+    var playPromise = introOrb.play();
+    if(playPromise && playPromise.catch){ playPromise.catch(function(){ /* autoplay blocked; orb stays as static first frame, text sequence still runs */ }); }
+  }
+  progressWrap.innerHTML = slides.map(function(){ return '<div class="dot"><div class="fill"></div></div>'; }).join('');
+  var dotFills = progressWrap.querySelectorAll('.fill');
+
+  function finishIntro(){
+    if(finished) return;
+    finished = true;
+    try{ sessionStorage.setItem(SEEN_KEY, '1'); }catch(e){}
+    gsap.to(introEl, { opacity:0, duration:0.5, ease:'power1.out', onComplete:function(){
+      introEl.style.display = 'none';
+      body.classList.remove('intro-active');
+    }});
+  }
+
+  function skipIntro(){
+    cancelled = true;
+    if(activeTween){ activeTween.kill(); activeTween = null; }
+    finishIntro();
+  }
+  window.skipIntro = skipIntro;
+
+  function tween(target, from, to){
+    return new Promise(function(resolve){
+      if(cancelled){ resolve(); return; }
+      activeTween = gsap.fromTo(target, from, Object.assign({}, to, { onComplete:function(){ activeTween = null; resolve(); } }));
     });
-  }catch(e){ /* hero animation is decorative; page works fine without it */ }
+  }
+
+  function wait(ms){
+    return new Promise(function(resolve){ setTimeout(resolve, ms); });
+  }
+
+  function typeQuote(fullText, quoteEl, dotFill){
+    var words = fullText.split(' ');
+    quoteEl.innerHTML = '';
+    var spans = words.map(function(w, i){
+      var span = document.createElement('span');
+      span.textContent = w;
+      span.style.display = 'inline-block';
+      quoteEl.appendChild(span);
+      if(i < words.length - 1) quoteEl.appendChild(document.createTextNode(' '));
+      return span;
+    });
+    var wps = 4.6;
+    var stagger = 1 / wps;
+    var dur = Math.max(words.length * stagger, 0.6);
+    gsap.set(spans, { opacity:0, y:5 });
+    return new Promise(function(resolve){
+      if(cancelled){ gsap.set(spans, { opacity:1, y:0 }); resolve(); return; }
+      activeTween = gsap.to(spans, {
+        opacity:1, y:0, duration:0.5, ease:'power2.out', stagger:stagger,
+        onComplete: function(){ activeTween = null; resolve(); }
+      });
+      if(dotFill){ gsap.to(dotFill, { width:'70%', duration:dur, ease:'none' }); }
+    });
+  }
+
+  async function runSlide(slide, i){
+    var accent = slide.getAttribute('data-accent');
+    if(accent) slide.style.setProperty('--intro-accent', accent);
+    var domain = slide.querySelector('.domain');
+    var quoteEl = slide.querySelector('.quote');
+    var source = slide.querySelector('.source');
+    var dot = dotFills[i];
+    var isBookend = slide.classList.contains('intro-framing') || slide.classList.contains('intro-closing');
+
+    var fullText = quoteEl.textContent;
+    quoteEl.textContent = '';
+
+    gsap.set(slide, { opacity:1, visibility:'visible' });
+
+    if(domain){ await tween(domain, { opacity:0, y:14 }, { opacity:1, y:0, duration:0.4, ease:'power2.out' }); }
+    if(cancelled) return;
+
+    await typeQuote(fullText, quoteEl, dot);
+    if(cancelled) return;
+
+    if(source){ await tween(source, { opacity:0, y:8 }, { opacity:1, y:0, duration:0.4, ease:'power2.out' }); }
+    if(cancelled) return;
+
+    if(dot){ gsap.to(dot, { width:'100%', duration:0.3, ease:'power1.out' }); }
+
+    var customHold = parseInt(slide.getAttribute('data-hold'), 10);
+    await wait(customHold || (isBookend ? 900 : 550));
+    if(cancelled) return;
+
+    await tween(slide, { opacity:1 }, { opacity:0, duration:0.35, ease:'power1.in' });
+    gsap.set(slide, { visibility:'hidden' });
+  }
+
+  async function run(){
+    for(var i=0; i<slides.length; i++){
+      if(cancelled) break;
+      await runSlide(slides[i], i);
+    }
+    finishIntro();
+  }
+
+  run();
+})();
 </script>
 </body>
 </html>
