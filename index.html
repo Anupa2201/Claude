@@ -48,6 +48,13 @@
       radial-gradient(ellipse 460px 420px at 46% 92%, rgba(34,211,238,0.12), transparent 62%);
   }
   .hero-inner{ position:relative; z-index:1; max-width:1120px; margin:0 auto; }
+  .hero-mascot{ position:absolute; top:6px; right:0; width:200px; height:200px; z-index:1; animation:mascotFloat 5s ease-in-out infinite; }
+  .hero-mascot .spark{ transform-origin:center; animation:mascotTwinkle 2.4s ease-in-out infinite; }
+  .hero-mascot .spark:nth-child(2){ animation-delay:0.5s; }
+  .hero-mascot .spark:nth-child(3){ animation-delay:1s; }
+  @keyframes mascotFloat{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } }
+  @keyframes mascotTwinkle{ 0%,100%{ opacity:0.35; transform:scale(0.8); } 50%{ opacity:1; transform:scale(1.15); } }
+  @media (max-width:900px){ .hero-mascot{ display:none; } }
   .hero h1{ font-size:clamp(40px,7vw,76px); line-height:0.98; margin:22px 0 24px; }
   .hero h1 .grad{ background:linear-gradient(90deg, var(--blue), var(--purple), var(--pink)); -webkit-background-clip:text; background-clip:text; color:transparent; }
   .hero .pitch{ font-size:16px; line-height:1.65; color:var(--dim); max-width:520px; margin:0 0 34px; }
@@ -189,6 +196,34 @@
 
 <section class="hero">
   <div class="hero-inner">
+    <svg class="hero-mascot" viewBox="0 0 200 200" aria-hidden="true">
+      <defs>
+        <linearGradient id="botGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" style="stop-color:var(--blue)"/>
+          <stop offset="55%" style="stop-color:var(--purple)"/>
+          <stop offset="100%" style="stop-color:var(--pink)"/>
+        </linearGradient>
+      </defs>
+      <path class="spark" d="M30 26 L34 34 L42 38 L34 42 L30 50 L26 42 L18 38 L26 34 Z" fill="var(--blue)"/>
+      <path class="spark" d="M168 46 L171 52 L177 55 L171 58 L168 64 L165 58 L159 55 L165 52 Z" fill="var(--pink)"/>
+      <path class="spark" d="M150 20 L152 25 L157 27 L152 29 L150 34 L148 29 L143 27 L148 25 Z" fill="var(--purple)"/>
+      <rect x="28" y="72" width="28" height="22" rx="6" fill="url(#botGrad)"/>
+      <rect x="144" y="72" width="28" height="22" rx="6" fill="url(#botGrad)"/>
+      <rect x="55" y="40" width="90" height="110" rx="16" fill="url(#botGrad)"/>
+      <g fill="#fff">
+        <rect x="74" y="64" width="16" height="6" rx="2"/>
+        <rect x="74" y="64" width="6" height="18" rx="2"/>
+        <rect x="110" y="64" width="16" height="6" rx="2"/>
+        <rect x="120" y="64" width="6" height="18" rx="2"/>
+      </g>
+      <path d="M78,110 Q100,130 122,110" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <g fill="url(#botGrad)">
+        <rect x="66" y="150" width="13" height="28" rx="4"/>
+        <rect x="82" y="150" width="13" height="28" rx="4"/>
+        <rect x="105" y="150" width="13" height="28" rx="4"/>
+        <rect x="121" y="150" width="13" height="28" rx="4"/>
+      </g>
+    </svg>
     <span class="eyebrow-label"><span class="dash"></span>POLICY DIAGNOSTIC TOOL &middot; AI SAFETY</span>
     <h1 class="display">Does your<br>definition<br><span class="grad">actually work?</span></h1>
     <p class="pitch">Test whether your human oversight clause survives contact with reality — before an incident does.</p>
