@@ -101,11 +101,14 @@
     position:fixed; inset:0; z-index:5000; background:var(--bg); overflow:hidden;
     display:flex; align-items:center; justify-content:center;
   }
-  #introVideo{
-    position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0;
+  #introOrb{
+    position:absolute; top:50%; left:50%; width:min(1100px,130vw); height:min(1100px,130vw);
+    transform:translate(-50%,-50%); object-fit:contain; z-index:0;
+    mix-blend-mode:screen; opacity:0.85; filter:blur(2px);
   }
   #introOverlay{
-    position:absolute; inset:0; z-index:1; background:rgba(21,26,28,0.62);
+    position:absolute; inset:0; z-index:1;
+    background:radial-gradient(ellipse 60% 55% at 50% 50%, rgba(7,8,12,0.25), rgba(7,8,12,0.82) 75%);
   }
   #introSkip{
     position:fixed; top:22px; right:24px; z-index:5001;
@@ -118,11 +121,20 @@
     position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:center;
     text-align:center; padding:0 24px; opacity:0; visibility:hidden;
   }
-  .intro-slide .domain{ font-family:'IBM Plex Mono',monospace; font-weight:500; font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--intro-accent, var(--blue)); margin-bottom:26px; }
-  .intro-slide .quote{ font-family:'Barlow',sans-serif; font-weight:500; font-size:clamp(22px,3.1vw,32px); line-height:1.5; max-width:880px; margin:0 0 26px; color:var(--text); }
-  .intro-slide .source{ font-family:'IBM Plex Mono',monospace; font-size:14px; color:var(--dim); letter-spacing:0.02em; }
+  .intro-slide .domain{ font-family:'IBM Plex Mono',monospace; font-weight:500; font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--intro-accent, var(--blue)); margin-bottom:26px; opacity:0; }
+  .intro-slide .quote{ font-family:'Barlow',sans-serif; font-weight:500; font-size:clamp(22px,3.1vw,32px); line-height:1.5; max-width:880px; margin:0 0 26px; color:var(--text); min-height:1.5em; }
+  .intro-slide .quote::after{ content:''; display:inline-block; width:2px; height:0.95em; margin-left:2px; background:var(--intro-accent, var(--blue)); vertical-align:-0.12em; animation:introCaret 0.85s step-end infinite; }
+  .intro-slide .quote.done::after{ display:none; }
+  .intro-slide .source{ font-family:'IBM Plex Mono',monospace; font-size:14px; color:var(--dim); letter-spacing:0.02em; opacity:0; }
   .intro-slide.intro-framing .quote{ font-family:'Anton','Barlow Condensed',sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.01em; font-size:clamp(30px,5.2vw,58px); line-height:1.08; max-width:920px; }
-  .intro-slide.intro-closing .quote{ font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:clamp(24px,3.6vw,38px); line-height:1.3; max-width:820px; }
+  .intro-slide.intro-closing .quote{
+    font-family:'Anton','Barlow Condensed',sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.005em;
+    font-size:clamp(34px,6vw,68px); line-height:1.1; max-width:1000px;
+    background:linear-gradient(90deg, var(--blue), var(--purple), var(--pink));
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent;
+  }
+  .intro-slide.intro-closing .quote::after{ background:var(--pink); }
+  @keyframes introCaret{ 0%,49%{ opacity:1; } 50%,100%{ opacity:0; } }
   .intro-progress{ position:fixed; bottom:26px; left:50%; transform:translateX(-50%); display:flex; gap:6px; z-index:5001; }
   .intro-progress .dot{ width:26px; height:3px; border-radius:2px; background:rgba(255,255,255,0.2); overflow:hidden; position:relative; }
   .intro-progress .dot .fill{ position:absolute; inset:0; width:0%; background:var(--blue); }
@@ -131,43 +143,43 @@
 <body>
 
 <div id="intro">
-  <video id="introVideo" autoplay loop muted playsinline preload="auto">
-    <source src="assets/video/intro-bg.mp4" type="video/mp4">
-    <source src="assets/video/intro-bg.webm" type="video/webm">
+  <video id="introOrb" autoplay loop muted playsinline preload="auto">
+    <source src="assets/video/intro-orb.mp4" type="video/mp4">
+    <source src="assets/video/intro-orb.webm" type="video/webm">
   </video>
   <div id="introOverlay"></div>
   <a id="introSkip" href="javascript:void(0)" onclick="skipIntro()">Skip &rarr;</a>
 
-  <div class="intro-slide intro-framing" data-accent="var(--blue)" data-duration="4">
+  <div class="intro-slide intro-framing" data-accent="var(--blue)">
     <div class="domain">Before we start</div>
     <div class="quote">Why is human oversight necessary?</div>
   </div>
 
-  <div class="intro-slide" data-accent="var(--amber)" data-duration="7.5">
+  <div class="intro-slide" data-accent="var(--amber)">
     <div class="domain">Criminal Justice &middot; COMPAS Recidivism Algorithm</div>
-    <div class="quote">US courts used a machine-learning algorithm to score defendants' risk of reoffending, trusting the number as neutral. A 2016 investigation found it was nearly twice as likely to wrongly flag Black defendants as high-risk, and nobody had checked the model for that bias before judges started relying on it. The investigation's own headline called it &lsquo;biased against blacks.&rsquo;</div>
+    <div class="quote">A machine-learning algorithm scored defendants' risk of reoffending — nearly twice as likely to wrongly flag Black defendants as high-risk. Nobody had checked the model for that bias before judges started relying on it.</div>
     <div class="source">— ProPublica, &ldquo;Machine Bias,&rdquo; 2016</div>
   </div>
 
-  <div class="intro-slide" data-accent="var(--purple)" data-duration="7.5">
+  <div class="intro-slide" data-accent="var(--purple)">
     <div class="domain">Welfare &amp; Tax &middot; Dutch Childcare Benefits Scandal</div>
-    <div class="quote">A self-learning algorithm decided which parents looked like fraud risks, using dual nationality as one of its signals. Over 20,000 families were wrongly accused, forced into debt, and in thousands of cases had their children taken into foster care, before anyone with real authority checked what the algorithm was actually doing. The government resigned after a parliamentary inquiry found &lsquo;grave shortcomings, including institutional biases.&rsquo;</div>
+    <div class="quote">A self-learning algorithm flagged parents as fraud risks, using dual nationality as a signal. Over 20,000 families were wrongly accused, plunged into debt, and in thousands of cases had their children taken into foster care.</div>
     <div class="source">— Dutch parliamentary inquiry report, 2020</div>
   </div>
 
-  <div class="intro-slide" data-accent="var(--cyan)" data-duration="6.5">
+  <div class="intro-slide" data-accent="var(--cyan)">
     <div class="domain">Hiring &middot; Amazon's AI Recruiting Tool</div>
-    <div class="quote">Amazon built a machine-learning tool to score job applicants automatically, training it on ten years of past resumes. Nobody caught, for a full year, that it had taught itself to penalize any resume mentioning &lsquo;women's&rsquo; — Reuters later put it simply: the tool &lsquo;did not like women.&rsquo;</div>
+    <div class="quote">Amazon's hiring algorithm taught itself to penalize any resume mentioning &lsquo;women's&rsquo; — and nobody caught it for a full year. Reuters put it simply: the tool &lsquo;did not like women.&rsquo;</div>
     <div class="source">— Reuters, Jeffrey Dastin, 2018</div>
   </div>
 
-  <div class="intro-slide" data-accent="var(--blue)" data-duration="7.5">
+  <div class="intro-slide" data-accent="var(--blue)">
     <div class="domain">Education &middot; UK A-level Grading Algorithm, 2020</div>
-    <div class="quote">In August 2020, with exams cancelled by the pandemic, UK exam regulator Ofqual used an algorithm to calculate students' final grades instead of trusting teachers' own predictions. Nearly 40% of A-level results were downgraded, hitting state school students hardest while boosting private school results, with no real way to challenge a grade before it cost someone their university place. The education secretary said he was &lsquo;incredibly sorry&rsquo; as the government was forced into a U-turn days later.</div>
+    <div class="quote">With exams cancelled in 2020, Ofqual used an algorithm to calculate final grades instead of trusting teachers. Nearly 40% of results were downgraded — hitting state school students hardest, with no real way to challenge a grade before it cost someone their place.</div>
     <div class="source">— CNBC / Ofqual results data, 2020</div>
   </div>
 
-  <div class="intro-slide intro-closing" data-accent="var(--amber)" data-duration="5">
+  <div class="intro-slide intro-closing" data-accent="var(--amber)">
     <div class="domain">The gap</div>
     <div class="quote">Governments recognize why human oversight matters. Most still don't specify how it's supposed to work.</div>
   </div>
@@ -261,8 +273,9 @@
   var slides = Array.prototype.slice.call(document.querySelectorAll('.intro-slide'));
   var progressWrap = document.getElementById('introProgress');
   var body = document.body;
-  var tl = null;
   var finished = false;
+  var cancelled = false;
+  var activeTween = null;
 
   var alreadySeen = false;
   try{ alreadySeen = sessionStorage.getItem(SEEN_KEY) === '1'; }catch(e){}
@@ -273,10 +286,10 @@
   }
 
   body.classList.add('intro-active');
-  var introVideo = document.getElementById('introVideo');
-  if(introVideo){
-    var playPromise = introVideo.play();
-    if(playPromise && playPromise.catch){ playPromise.catch(function(){ /* autoplay blocked; video stays as static first frame, text sequence still runs */ }); }
+  var introOrb = document.getElementById('introOrb');
+  if(introOrb){
+    var playPromise = introOrb.play();
+    if(playPromise && playPromise.catch){ playPromise.catch(function(){ /* autoplay blocked; orb stays as static first frame, text sequence still runs */ }); }
   }
   progressWrap.innerHTML = slides.map(function(){ return '<div class="dot"><div class="fill"></div></div>'; }).join('');
   var dotFills = progressWrap.querySelectorAll('.fill');
@@ -292,31 +305,79 @@
   }
 
   function skipIntro(){
-    if(tl) tl.kill();
+    cancelled = true;
+    if(activeTween){ activeTween.kill(); activeTween = null; }
     finishIntro();
   }
   window.skipIntro = skipIntro;
 
-  tl = gsap.timeline({ onComplete: finishIntro });
+  function tween(target, from, to){
+    return new Promise(function(resolve){
+      if(cancelled){ resolve(); return; }
+      activeTween = gsap.fromTo(target, from, Object.assign({}, to, { onComplete:function(){ activeTween = null; resolve(); } }));
+    });
+  }
 
-  slides.forEach(function(slide, i){
+  function wait(ms){
+    return new Promise(function(resolve){ setTimeout(resolve, ms); });
+  }
+
+  function typeQuote(quoteEl, dotFill){
+    var fullText = quoteEl.textContent;
+    quoteEl.textContent = '';
+    var cps = 30;
+    var dur = Math.max(fullText.length / cps, 0.6);
+    return new Promise(function(resolve){
+      if(cancelled){ quoteEl.textContent = fullText; resolve(); return; }
+      var proxy = { n:0 };
+      var targets = dotFill ? [proxy] : [proxy];
+      activeTween = gsap.to(proxy, {
+        n: fullText.length, duration: dur, ease:'none',
+        onUpdate: function(){ quoteEl.textContent = fullText.slice(0, Math.round(proxy.n)); },
+        onComplete: function(){ quoteEl.textContent = fullText; quoteEl.classList.add('done'); activeTween = null; resolve(); }
+      });
+      if(dotFill){ gsap.to(dotFill, { width:'70%', duration:dur, ease:'none' }); }
+    });
+  }
+
+  async function runSlide(slide, i){
     var accent = slide.getAttribute('data-accent');
     if(accent) slide.style.setProperty('--intro-accent', accent);
     var domain = slide.querySelector('.domain');
-    var quote = slide.querySelector('.quote');
+    var quoteEl = slide.querySelector('.quote');
     var source = slide.querySelector('.source');
     var dot = dotFills[i];
-    var duration = parseFloat(slide.getAttribute('data-duration')) || 4.5;
+    var isBookend = slide.classList.contains('intro-framing') || slide.classList.contains('intro-closing');
 
-    tl.set(slide, { opacity:1, visibility:'visible' }, 'slide'+i);
-    tl.fromTo([domain, quote, source].filter(Boolean), { opacity:0, y:14 },
-      { opacity:1, y:0, duration:0.5, ease:'power2.out', stagger:0.1 }, 'slide'+i);
+    gsap.set(slide, { opacity:1, visibility:'visible' });
 
-    tl.to(dot, { width:'100%', duration:duration-0.3, ease:'none' }, 'slide'+i);
+    if(domain){ await tween(domain, { opacity:0, y:14 }, { opacity:1, y:0, duration:0.4, ease:'power2.out' }); }
+    if(cancelled) return;
 
-    tl.to(slide, { opacity:0, duration:0.3, ease:'power1.in' }, 'slide'+i+'+='+(duration-0.35));
-    tl.set(slide, { visibility:'hidden' }, 'slide'+i+'+='+(duration-0.05));
-  });
+    await typeQuote(quoteEl, dot);
+    if(cancelled) return;
+
+    if(source){ await tween(source, { opacity:0, y:8 }, { opacity:1, y:0, duration:0.4, ease:'power2.out' }); }
+    if(cancelled) return;
+
+    if(dot){ gsap.to(dot, { width:'100%', duration:0.3, ease:'power1.out' }); }
+
+    await wait(isBookend ? 1300 : 900);
+    if(cancelled) return;
+
+    await tween(slide, { opacity:1 }, { opacity:0, duration:0.35, ease:'power1.in' });
+    gsap.set(slide, { visibility:'hidden' });
+  }
+
+  async function run(){
+    for(var i=0; i<slides.length; i++){
+      if(cancelled) break;
+      await runSlide(slides[i], i);
+    }
+    finishIntro();
+  }
+
+  run();
 })();
 </script>
 </body>
