@@ -344,11 +344,30 @@ const SCENARIOS = [
     brief:'A general-purpose AI assistant gives harmful advice, embedded in a product with no obvious sector regulator or owner.' },
 ];
 
+// Keyed by [reach][scenario id] so each of the four scenarios reads as its own
+// situation instead of repeating identical text whenever they share a reach.
 const CONSEQUENCE = {
-  scope:()=> 'Your definition doesn\u2019t clearly state it applies to a case like this, with no obvious owner \u2014 so it may not reach this situation at all.',
-  who:()=> 'Without a named role, nobody in particular is watching here \u2014 it could slip through simply because it wasn\u2019t anyone\u2019s specific job.',
-  when:()=> 'Without a fixed review moment, this could go unreviewed for an extended stretch before anyone happens to look.',
-  how:()=> 'Without a defined threshold, a reviewer might not know this was worth flagging until after the damage was done.',
+  who: {
+    trading: 'Without a named role, nobody in particular is watching the trading desk\u2019s automated sell orders \u2014 a cascade like this can run its course before it becomes anyone\u2019s specific job to notice.',
+    credit: 'Without a named role, nobody in particular is watching automated loan decisions \u2014 a wrongful denial like this can go out the door because it wasn\u2019t anyone\u2019s specific job to check first.',
+    hiring: 'Without a named role, nobody in particular is watching the screening tool\u2019s outputs \u2014 a skewed filter like this can run for months because auditing it wasn\u2019t anyone\u2019s specific job.',
+    chatbot: 'Without a named role, nobody in particular is watching what the assistant tells users \u2014 harmful advice like this can go out because reviewing it wasn\u2019t anyone\u2019s specific job.',
+  },
+  when: {
+    trading: 'Without a fixed review moment, a three-minute cascade like this can finish long before anyone happens to look \u2014 by the time a review does happen, the damage is already done.',
+    credit: 'Without a fixed review moment, a denial like this can sit unreviewed for an extended stretch \u2014 long enough for a small business to feel the effects before anyone happens to look.',
+    hiring: 'Without a fixed review moment, a skewed filter like this can run for months unreviewed before anyone happens to notice the pattern in who\u2019s being screened out.',
+    chatbot: 'Without a fixed review moment, harmful advice like this can keep circulating for an extended stretch before anyone happens to review what the assistant has been telling people.',
+  },
+  how: {
+    trading: 'Without a defined threshold, a reviewer might not know a swing like this was worth flagging until after the circuit breakers had already tripped.',
+    credit: 'Without a defined threshold, a reviewer might not know this particular denial was worth a second look until after the loan opportunity was already gone.',
+    hiring: 'Without a defined threshold, a reviewer might not know this pattern was worth flagging until after months of resumes had already been filtered out.',
+    chatbot: 'Without a defined threshold, a reviewer might not know this advice was worth flagging until after someone had already acted on it.',
+  },
+  scope: {
+    chatbot: 'Your definition doesn\u2019t clearly state it applies to a general-purpose assistant like this, with no obvious sector regulator or owner \u2014 so it may not reach this situation at all.',
+  },
 };
 
 // Natural numbers/timeframes pulled straight from each scenario's own brief text,
@@ -508,7 +527,7 @@ function renderScene(){
   const reach = reachFor(s);
   const note = (reach==='human')
     ? 'Your definition\u2019s WHO/WHEN/HOW hold up well enough here that the signal would likely reach a human \u2014 though "vague" gates below still mean real degradation.'
-    : CONSEQUENCE[reach]() + (scanResults[reach].fix ? ' Suggested fix: ' + scanResults[reach].fix : '');
+    : CONSEQUENCE[reach][s.id] + (scanResults[reach].fix ? ' Suggested fix: ' + scanResults[reach].fix : '');
   document.getElementById('noteBox').textContent = note;
   document.getElementById('consequenceVisual').innerHTML = consequenceVisualHTML(reach, s.id);
 
@@ -519,19 +538,24 @@ function renderScene(){
     timers.push(setTimeout(()=>{
       document.getElementById('noteBox').classList.add('show');
       document.getElementById('consequenceVisual').classList.add('show');
-    }, 5200));
+    }, NOTE_SHOW_MS));
     timers.push(setTimeout(()=>{
       if(idx < SCENARIOS.length-1){ idx++; renderScene(); } else { goChecklist(); }
-    }, 8600));
+    }, SCENE_DURATION_MS));
   } else {
     document.getElementById('noteBox').classList.add('show');
     document.getElementById('consequenceVisual').classList.add('show');
   }
 }
 
+// Give readers real time with the note text before auto-advancing: the note appears
+// partway through the path animation, then holds on screen for ~9s before the next scene.
+const NOTE_SHOW_MS = 5200;
+const SCENE_DURATION_MS = 14000;
+
 function runChapterFill(){
   const fill = document.getElementById(`chap-${idx}`).querySelector('.fill');
-  requestAnimationFrame(()=>{ fill.style.transition='width 8.6s linear'; fill.style.width='100%'; });
+  requestAnimationFrame(()=>{ fill.style.transition=`width ${SCENE_DURATION_MS/1000}s linear`; fill.style.width='100%'; });
 }
 
 // CSS transitions keep running on their own even after JS timers are cleared,

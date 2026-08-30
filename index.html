@@ -157,32 +157,38 @@
   </div>
 
   <div class="intro-slide" data-accent="var(--amber)">
-    <div class="domain">Criminal Justice &middot; COMPAS Recidivism Algorithm</div>
+    <div class="domain">Case 1 of 4 &middot; Criminal Justice &middot; COMPAS Recidivism Algorithm</div>
     <div class="quote">A machine-learning algorithm scored defendants' risk of reoffending — nearly twice as likely to wrongly flag Black defendants as high-risk. Nobody had checked the model for that bias before judges started relying on it.</div>
     <div class="source">— ProPublica, &ldquo;Machine Bias,&rdquo; 2016</div>
   </div>
 
   <div class="intro-slide" data-accent="var(--purple)">
-    <div class="domain">Welfare &amp; Tax &middot; Dutch Childcare Benefits Scandal</div>
-    <div class="quote">A self-learning algorithm flagged parents as fraud risks, using dual nationality as a signal. Over 20,000 families were wrongly accused, plunged into debt, and in thousands of cases had their children taken into foster care.</div>
+    <div class="domain">Case 2 of 4 &middot; Welfare &amp; Tax &middot; Dutch Childcare Benefits Scandal</div>
+    <div class="quote">A self-learning algorithm flagged parents as fraud risks, using dual nationality as a signal. Over 26,000 families were wrongly accused, plunged into debt, and in more than 1,600 cases had their children taken into foster care.</div>
     <div class="source">— Dutch parliamentary inquiry report, 2020</div>
   </div>
 
   <div class="intro-slide" data-accent="var(--cyan)">
-    <div class="domain">Hiring &middot; Amazon's AI Recruiting Tool</div>
-    <div class="quote">Amazon's hiring algorithm taught itself to penalize any resume mentioning &lsquo;women's&rsquo; — and nobody caught it for a full year. Reuters put it simply: the tool &lsquo;did not like women.&rsquo;</div>
-    <div class="source">— Reuters, Jeffrey Dastin, 2018</div>
+    <div class="domain">Case 3 of 4 &middot; Military &middot; Patriot Air-Defense System</div>
+    <div class="quote">During the 2003 Iraq invasion, Patriot missile crews were trained to trust the system's software over their own judgment. Operating with too much autonomy, it shot down a British Tornado and a US Navy F/A-18 — killing three aircrew it misidentified as enemies.</div>
+    <div class="source">— Defense Science Board Task Force on Patriot System Performance, 2005</div>
   </div>
 
   <div class="intro-slide" data-accent="var(--blue)">
-    <div class="domain">Education &middot; UK A-level Grading Algorithm, 2020</div>
+    <div class="domain">Case 4 of 4 &middot; Education &middot; UK A-level Grading Algorithm, 2020</div>
     <div class="quote">With exams cancelled in 2020, Ofqual used an algorithm to calculate final grades instead of trusting teachers. Nearly 40% of results were downgraded — hitting state school students hardest, with no real way to challenge a grade before it cost someone their place.</div>
     <div class="source">— CNBC / Ofqual results data, 2020</div>
   </div>
 
+  <div class="intro-slide" data-accent="var(--green)">
+    <div class="domain">The law &middot; EU AI Act, Article 14</div>
+    <div class="quote">The EU AI Act now requires high-risk AI systems to be designed so they "can be effectively overseen by natural persons" — but leaves who watches, when they check, and what triggers a stop entirely up to whoever writes the policy.</div>
+    <div class="source">— Regulation (EU) 2024/1689, Article 14, Human Oversight</div>
+  </div>
+
   <div class="intro-slide intro-closing" data-accent="var(--amber)">
     <div class="domain">The gap</div>
-    <div class="quote">Governments recognize why human oversight matters. Most still don't specify how it's supposed to work.</div>
+    <div class="quote">The law says "effectively overseen." It doesn't say by whom, how often, or at what threshold — and that's exactly where these four cases fell through. Signal Check reads your policy and tells you if it would too.</div>
   </div>
 
   <div class="intro-progress" id="introProgress"></div>
@@ -357,18 +363,19 @@
     var spans = words.map(function(w, i){
       var span = document.createElement('span');
       span.textContent = w;
-      span.style.opacity = '0';
+      span.style.display = 'inline-block';
       quoteEl.appendChild(span);
       if(i < words.length - 1) quoteEl.appendChild(document.createTextNode(' '));
       return span;
     });
-    var wps = 3.2;
+    var wps = 4.6;
     var stagger = 1 / wps;
     var dur = Math.max(words.length * stagger, 0.6);
+    gsap.set(spans, { opacity:0, y:5 });
     return new Promise(function(resolve){
-      if(cancelled){ spans.forEach(function(s){ s.style.opacity = '1'; }); resolve(); return; }
+      if(cancelled){ gsap.set(spans, { opacity:1, y:0 }); resolve(); return; }
       activeTween = gsap.to(spans, {
-        opacity:1, duration:0.4, ease:'power1.out', stagger:stagger,
+        opacity:1, y:0, duration:0.5, ease:'power2.out', stagger:stagger,
         onComplete: function(){ activeTween = null; resolve(); }
       });
       if(dotFill){ gsap.to(dotFill, { width:'70%', duration:dur, ease:'none' }); }
@@ -400,7 +407,7 @@
 
     if(dot){ gsap.to(dot, { width:'100%', duration:0.3, ease:'power1.out' }); }
 
-    await wait(isBookend ? 1300 : 900);
+    await wait(isBookend ? 900 : 550);
     if(cancelled) return;
 
     await tween(slide, { opacity:1 }, { opacity:0, duration:0.35, ease:'power1.in' });
