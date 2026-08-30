@@ -8,8 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#07080C; --panel:#12161D; --panel-soft:#0D1116; --edge:#232B36; --text:#EEF2F7; --dim:#8B97A8;
-    --blue:#5B7CFA; --purple:#A855F7; --pink:#EC4899; --cyan:#22D3EE; --green:#34D399; --amber:#E8B93D; --red:#F0576B;
+ --bg:#07080C; --panel:#12161D; --panel-soft:#0D1116; --edge:#232B36; --text:#EEF2F7; --dim:#8B97A8;
+ --blue:#5B7CFA; --purple:#A855F7; --pink:#EC4899; --cyan:#22D3EE; --green:#34D399; --amber:#E8B93D; --red:#F0576B;
   }
   .display{ font-family:'Anton', 'Barlow Condensed', sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.01em; }
   .mono{ font-family:'IBM Plex Mono', monospace; }
@@ -204,7 +204,7 @@
     <p style="font-size:15px; line-height:1.7; color:var(--dim); max-width:640px; margin:0 0 32px;">Paste the exact text of your proposed oversight definition. It will be tested against four realistic incident scenarios.</p>
 
     <label>Policy title (optional)</label>
-    <input type="text" id="policyTitle" placeholder="e.g. AI Oversight Definition — Draft 3">
+    <input type="text" id="policyTitle" placeholder="e.g. AI Oversight Definition - Draft 3">
     <label>Oversight definition <span class="req">*</span></label>
     <textarea id="policyText" placeholder="Paste your human oversight definition here…" oninput="onDefinitionInput()"></textarea>
     <div class="field-meta">
@@ -212,7 +212,7 @@
       <a onclick="loadExample()">load example</a>
     </div>
 
-    <div class="caveat" style="margin-top:20px;"><span class="ic">&#9888;</span><div><b>Automated keyword scan</b> — a first-pass signal, not a definitive audit. Review results with qualified legal and technical experts before making policy decisions.</div></div>
+    <div class="caveat" style="margin-top:20px;"><span class="ic">&#9888;</span><div><b>Automated keyword scan</b> - a first-pass signal, not a definitive audit. Review results with qualified legal and technical experts before making policy decisions.</div></div>
 
     <button class="btn" id="submitBtn" onclick="goPlayer()" disabled>Paste a definition to continue</button>
   </div>
@@ -220,7 +220,7 @@
   <!-- SCREEN 2: PLAYER -->
   <div class="screen" id="screen-player">
     <div class="step-indicator"><span class="dash"></span><span>STEP 2 OF 2</span></div>
-    <div class="caveat" style="max-width:900px; margin-left:auto; margin-right:auto;"><span class="ic">&#9888;</span><div>Scores below come from an automated keyword scan of your text — treat as a first-pass signal, not a definitive audit.</div></div>
+    <div class="caveat" style="max-width:900px; margin-left:auto; margin-right:auto;"><span class="ic">&#9888;</span><div>Scores below come from an automated keyword scan of your text - treat as a first-pass signal, not a definitive audit.</div></div>
     <div class="chapterbar" id="chapterbar"></div>
     <div class="player-card">
       <div class="scenario-label" id="scenLabel"></div>
@@ -268,7 +268,7 @@
     <div class="summary-line" id="summaryLine"></div>
 
     <div class="results-footer">
-      <div class="caveat"><span class="ic">&#9888;</span><div><b>Automated keyword scan</b> — a first-pass signal, not a definitive audit. Review results with qualified legal and technical experts before making policy decisions.</div></div>
+      <div class="caveat"><span class="ic">&#9888;</span><div><b>Automated keyword scan</b> - a first-pass signal, not a definitive audit. Review results with qualified legal and technical experts before making policy decisions.</div></div>
       <div style="display:flex; gap:10px;">
         <button class="btn secondary" onclick="location.reload()">Start Over</button>
         <button class="btn" onclick="downloadReport()">&#8681; Download Report</button>
@@ -286,7 +286,7 @@ const CHECKS = [
       const specific = /\b(designated|named|chief|senior|head of|nominated)\b[^.]{0,25}\b(officer|manager|lead|reviewer|role)\b/i;
       const generic = /\b(responsible|accountable|governance framework|the organisation|the firm)\b/i;
       if(specific.test(t)) return {tier:'specified', why:'Found a specific named role (e.g. "designated officer").'};
-      if(generic.test(t)) return {tier:'vague', why:'Only generic accountability language found ("responsible," "the organisation") \u2014 no named role.', fix:'Name a specific role, e.g. "a designated AI safety officer."'};
+      if(generic.test(t)) return {tier:'vague', why:'Only generic accountability language found ("responsible," "the organisation") - no named role.', fix:'Name a specific role, e.g. "a designated AI safety officer."'};
       return {tier:'not_specified', why:'No role or accountability language detected.', fix:'Add a specific accountable role.'};
     }},
   { key:'when', label:'Fixes a moment for review',
@@ -348,14 +348,14 @@ const SCENARIOS = [
 // situation instead of repeating identical text whenever they share a reach.
 const CONSEQUENCE = {
   who: {
-    trading: 'Without a named role, nobody in particular is watching the trading desk\u2019s automated sell orders \u2014 a cascade like this can run its course before it becomes anyone\u2019s specific job to notice.',
-    credit: 'Without a named role, nobody in particular is watching automated loan decisions \u2014 a wrongful denial like this can go out the door because it wasn\u2019t anyone\u2019s specific job to check first.',
-    hiring: 'Without a named role, nobody in particular is watching the screening tool\u2019s outputs \u2014 a skewed filter like this can run for months because auditing it wasn\u2019t anyone\u2019s specific job.',
-    chatbot: 'Without a named role, nobody in particular is watching what the assistant tells users \u2014 harmful advice like this can go out because reviewing it wasn\u2019t anyone\u2019s specific job.',
+    trading: 'Without a named role, nobody in particular is watching the trading desk\u2019s automated sell orders - a cascade like this can run its course before it becomes anyone\u2019s specific job to notice.',
+    credit: 'Without a named role, nobody in particular is watching automated loan decisions - a wrongful denial like this can go out the door because it wasn\u2019t anyone\u2019s specific job to check first.',
+    hiring: 'Without a named role, nobody in particular is watching the screening tool\u2019s outputs - a skewed filter like this can run for months because auditing it wasn\u2019t anyone\u2019s specific job.',
+    chatbot: 'Without a named role, nobody in particular is watching what the assistant tells users - harmful advice like this can go out because reviewing it wasn\u2019t anyone\u2019s specific job.',
   },
   when: {
-    trading: 'Without a fixed review moment, a three-minute cascade like this can finish long before anyone happens to look \u2014 by the time a review does happen, the damage is already done.',
-    credit: 'Without a fixed review moment, a denial like this can sit unreviewed for an extended stretch \u2014 long enough for a small business to feel the effects before anyone happens to look.',
+    trading: 'Without a fixed review moment, a three-minute cascade like this can finish long before anyone happens to look - by the time a review does happen, the damage is already done.',
+    credit: 'Without a fixed review moment, a denial like this can sit unreviewed for an extended stretch - long enough for a small business to feel the effects before anyone happens to look.',
     hiring: 'Without a fixed review moment, a skewed filter like this can run for months unreviewed before anyone happens to notice the pattern in who\u2019s being screened out.',
     chatbot: 'Without a fixed review moment, harmful advice like this can keep circulating for an extended stretch before anyone happens to review what the assistant has been telling people.',
   },
@@ -366,7 +366,7 @@ const CONSEQUENCE = {
     chatbot: 'Without a defined threshold, a reviewer might not know this advice was worth flagging until after someone had already acted on it.',
   },
   scope: {
-    chatbot: 'Your definition doesn\u2019t clearly state it applies to a general-purpose assistant like this, with no obvious sector regulator or owner \u2014 so it may not reach this situation at all.',
+    chatbot: 'Your definition doesn\u2019t clearly state it applies to a general-purpose assistant like this, with no obvious sector regulator or owner - so it may not reach this situation at all.',
   },
 };
 
@@ -381,7 +381,7 @@ function sceneDetail(scenarioId, reach){ return (SCENE_DETAIL[scenarioId] && SCE
 const CV_RED = '#E1594A', CV_GREEN = '#34D399', CV_DIM = '#8B97A8', CV_BLUE = '#5B7CFA', CV_AMBER = '#E8B93D';
 
 // Five small looping SVG/CSS "consequence" mini-animations, one per gate a signal can fail at
-// (plus 'human' for the success case). Purely decorative alongside the note text — same data
+// (plus 'human' for the success case). Purely decorative alongside the note text - same data
 // (reach, scenario) already computed in renderScene(), nothing new is scanned or scored here.
 const CONSEQUENCE_VISUAL = {
   who:(detail)=> `
@@ -526,7 +526,7 @@ function renderScene(){
 
   const reach = reachFor(s);
   const note = (reach==='human')
-    ? 'Your definition\u2019s WHO/WHEN/HOW hold up well enough here that the signal would likely reach a human \u2014 though "vague" gates below still mean real degradation.'
+    ? 'Your definition\u2019s WHO/WHEN/HOW hold up well enough here that the signal would likely reach a human - though "vague" gates below still mean real degradation.'
     : CONSEQUENCE[reach][s.id] + (scanResults[reach].fix ? ' Suggested fix: ' + scanResults[reach].fix : '');
   document.getElementById('noteBox').textContent = note;
   document.getElementById('consequenceVisual').innerHTML = consequenceVisualHTML(reach, s.id);
@@ -623,7 +623,7 @@ function drawPath(s, reach){
   animatePulse(nodes, order, reach, posOf, Y);
 }
 
-// small decorative "impact" ping at a node — purely visual, safe to leave
+// small decorative "impact" ping at a node - purely visual, safe to leave
 // unremoved since the next drawPath() call replaces the whole svg innerHTML anyway
 function spawnBurst(svg, x, y, color, isArrival){
   const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -841,21 +841,21 @@ function goChecklist(){
 function downloadReport(){
   const title = document.getElementById('policyTitle').value || 'Untitled policy';
   const text = document.getElementById('policyText').value || '(no definition text provided)';
-  let report = `OVERSIGHT SIGNAL TEST \u2014 REPORT\nPolicy: ${title}\n\nYOUR DEFINITION:\n${text}\n\nSCENARIO WALKTHROUGH:\n`;
+  let report = `OVERSIGHT SIGNAL TEST - REPORT\nPolicy: ${title}\n\nYOUR DEFINITION:\n${text}\n\nSCENARIO WALKTHROUGH:\n`;
   SCENARIOS.forEach(s=>{
     const order = gateOrderFor(s);
     report += `\n${s.title}\n${s.brief}\n`;
     order.forEach(g=>{
       const r = scanResults[g];
-      report += `  ${GATE_TITLE[g]}: ${VERDICT_LABEL[r.tier]} \u2014 ${r.why}${r.fix ? ' Suggested fix: '+r.fix : ''}\n`;
+      report += `  ${GATE_TITLE[g]}: ${VERDICT_LABEL[r.tier]} - ${r.why}${r.fix ? ' Suggested fix: '+r.fix : ''}\n`;
     });
   });
   report += `\nCHECKLIST (auto-scored from keyword scan):\n`;
   CHECKS.forEach(c=>{
     const r = scanResults[c.key];
-    report += `[${r.tier==='specified' ? 'x' : ' '}] ${c.label} \u2014 ${VERDICT_LABEL[r.tier]}\n    ${r.why}${r.fix ? '\n    Suggested fix: '+r.fix : ''}\n`;
+    report += `[${r.tier==='specified' ? 'x' : ' '}] ${c.label} - ${VERDICT_LABEL[r.tier]}\n    ${r.why}${r.fix ? '\n    Suggested fix: '+r.fix : ''}\n`;
   });
-  report += `\n---\nThis report is generated from an automated keyword scan \u2014 a first-pass signal, not a definitive legal or policy audit. Verify manually. Scenarios are fictionalized for illustration.\n`;
+  report += `\n---\nThis report is generated from an automated keyword scan - a first-pass signal, not a definitive legal or policy audit. Verify manually. Scenarios are fictionalized for illustration.\n`;
   const blob = new Blob([report], {type:'text/plain'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
