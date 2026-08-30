@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oversight Signal Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0D12; --panel:#141A22; --panel-soft:#10151C; --edge:#232B36; --text:#EAF0F6; --dim:#8B97A8;
+    --blue:#5B8DEF; --purple:#9B7BFF; --green:#34D399; --amber:#E8B93D; --red:#E1594A;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 620px 480px at 88% -6%, rgba(155,123,255,0.16), transparent 60%),
+      radial-gradient(ellipse 560px 460px at -8% 18%, rgba(91,141,239,0.14), transparent 60%),
+      radial-gradient(ellipse 520px 420px at 50% 108%, rgba(52,211,153,0.10), transparent 60%),
+      var(--bg);
+    background-attachment:fixed;
+    color:var(--text); font-family:'Barlow', sans-serif; min-height:100vh; display:flex; justify-content:center; padding:30px 16px 60px;
+  }
+  .wrap{ width:100%; max-width:760px; }
+  h1,h2{ font-family:'Barlow Condensed', sans-serif; font-weight:700; margin:0; }
+  .screen{ display:none; } .screen.active{ display:block; }
+
+  .caveat{ background:rgba(232,185,61,0.09); border:1px solid rgba(232,185,61,0.35); color:var(--amber); font-size:12px; padding:9px 12px; border-radius:6px; margin-bottom:14px; line-height:1.5; }
+
+  .card{ background:var(--panel); border:1px solid var(--edge); border-radius:12px; padding:26px 24px; }
+  .card h1{ font-size:32px; margin-bottom:8px; }
+  .card p{ font-size:14px; line-height:1.6; color:var(--dim); }
+  label{ display:block; font-family:'Barlow Condensed', sans-serif; font-weight:600; font-size:12.5px; text-transform:uppercase; letter-spacing:0.07em; color:var(--dim); margin:16px 0 6px; }
+  input[type=text], textarea{ width:100%; background:var(--panel-soft); border:1px solid var(--edge); border-radius:6px; color:var(--text); font-family:'Barlow', sans-serif; font-size:14.5px; padding:10px 12px; }
+  textarea{ min-height:120px; resize:vertical; }
+  .btn{ font-family:'Barlow Condensed', sans-serif; font-weight:600; font-size:16px; letter-spacing:0.02em; text-transform:uppercase; background:linear-gradient(135deg, var(--blue), var(--purple)); color:#080A0F; border:none; border-radius:7px; padding:12px 22px; cursor:pointer; margin-top:6px; margin-right:8px; }
+  .btn.secondary{ background:transparent; color:var(--text); border:1.5px solid var(--edge); }
+
+  .chapterbar{ display:flex; gap:5px; margin-bottom:14px; }
+  .chapter{ flex:1; height:4px; background:var(--edge); border-radius:2px; overflow:hidden; position:relative; }
+  .chapter .fill{ position:absolute; left:0; top:0; bottom:0; width:0%; background:linear-gradient(90deg, var(--blue), var(--purple)); }
+
+  .player-card{ background:var(--panel); border:1px solid var(--edge); border-radius:12px; padding:22px 22px 18px; }
+  .scenario-label{ font-family:'Barlow Condensed', sans-serif; font-weight:600; font-size:11.5px; color:var(--dim); text-transform:uppercase; letter-spacing:0.07em; }
+  .scenario-title{ font-size:27px; margin:2px 0 10px; }
+  .scenario-brief{ font-size:13.5px; line-height:1.6; color:var(--text); min-height:58px; }
+  svg#pathsvg{ width:100%; height:150px; margin-top:6px; }
+  .gate-label{ font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:11px; letter-spacing:0.04em; fill:var(--dim); }
+  .gate-verdict{ font-family:'Barlow Condensed', sans-serif; font-weight:600; font-size:11px; opacity:0; }
+  #trail{ transition:stroke .3s ease, opacity .3s ease; }
+  .impact-burst{ animation:impactBurst .6s cubic-bezier(.16,.9,.3,1) forwards; }
+  .impact-burst.arrival{ animation-duration:1s; }
+  @keyframes impactBurst{
+    0%{ r:5; stroke-opacity:0.9; stroke-width:3; }
+    100%{ r:26; stroke-opacity:0; stroke-width:0.5; }
+  }
+  #pulse{ transition:fill .3s ease, opacity .3s ease; }
+  #pulse.arrive{ animation:pulseArrive .7s cubic-bezier(.2,.9,.25,1.2); }
+  @keyframes pulseArrive{
+    0%{ r:7; }
+    35%{ r:11.5; }
+    100%{ r:7; }
+  }
+  .note-box{ font-size:13px; color:var(--dim); line-height:1.55; min-height:50px; margin-top:6px; border-top:1px dashed var(--edge); padding-top:10px; opacity:0; transition:opacity .4s ease; }
+  .note-box.show{ opacity:1; }
+  .controls{ display:flex; justify-content:space-between; align-items:center; margin-top:16px; }
+  .controls .left-btns{ display:flex; gap:8px; }
+  .ctrl-btn{ background:transparent; border:1px solid var(--edge); color:var(--text); border-radius:6px; padding:7px 14px; cursor:pointer; font-family:'Barlow Condensed',sans-serif; font-weight:600; letter-spacing:0.03em; font-size:13px; }
+  .ctrl-btn:hover{ border-color:var(--blue); }
+
+  .checklist-item{ background:var(--panel-soft); border:1px solid var(--edge); border-radius:8px; padding:12px 14px; margin-bottom:9px; }
+  .checklist-item .head{ display:flex; gap:9px; align-items:center; font-size:14.5px; }
+  .mark{ font-size:16px; font-weight:700; width:18px; flex-shrink:0; }
+  .mark.specified{ color:var(--green); } .mark.vague{ color:var(--amber); } .mark.not_specified{ color:var(--red); }
+  .why{ font-size:12.5px; color:var(--dim); margin-top:5px; margin-left:27px; line-height:1.5; }
+  .fix{ font-size:12.5px; color:var(--amber); margin-top:4px; margin-left:27px; }
+  .summary-line{ font-size:13.5px; color:var(--dim); margin:16px 0; padding-top:14px; border-top:1px dashed var(--edge); line-height:1.6; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- SCREEN 1: INPUT -->
+  <div class="screen active" id="screen-input">
+    <div class="card">
+      <h1>Oversight Signal Test</h1>
+      <div class="caveat">This runs an automated keyword scan of your text — a first-pass signal, not a definitive legal or policy audit.</div>
+      <p>Paste your working oversight definition. We'll test it against four realistic incidents and show, gate by gate, whether it would actually keep a human in the loop — then give you a checklist scored from the same scan.</p>
+      <label>Policy / definition name</label>
+      <input type="text" id="policyTitle" placeholder="e.g. Draft Human Oversight Clause v0.3">
+      <label>Paste your working definition</label>
+      <textarea id="policyText" placeholder="e.g. 'A designated AI safety officer shall review all automated decisions within 24 hours of deployment, triggered whenever model confidence falls below 90%, with authority to pause the system. All reviews shall be logged.'"></textarea>
+      <div><button class="btn" onclick="goPlayer()">Run the Signal Test &rarr;</button></div>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: PLAYER -->
+  <div class="screen" id="screen-player">
+    <div class="caveat">Scores below come from an automated keyword scan of your text — treat as a first-pass signal, not a definitive audit.</div>
+    <div class="chapterbar" id="chapterbar"></div>
+    <div class="player-card">
+      <div class="scenario-label" id="scenLabel"></div>
+      <h2 class="scenario-title" id="scenTitle"></h2>
+      <div class="scenario-brief" id="scenBrief"></div>
+      <svg id="pathsvg" viewBox="0 0 640 140"></svg>
+      <div class="note-box" id="noteBox"></div>
+      <div class="controls">
+        <div class="left-btns">
+          <button class="ctrl-btn" onclick="prevScene()">&larr; Prev</button>
+          <button class="ctrl-btn" id="playPauseBtn" onclick="togglePlay()">Pause</button>
+        </div>
+        <button class="ctrl-btn" onclick="nextScene()" id="nextBtn">Next &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: CHECKLIST -->
+  <div class="screen" id="screen-checklist">
+    <div class="card">
+      <h1>Oversight Definition Checklist</h1>
+      <div class="caveat">Auto-scored from the same keyword scan used in the walkthrough — verify manually before relying on this.</div>
+      <div id="checklistItems"></div>
+      <div class="summary-line" id="summaryLine"></div>
+      <div><button class="btn" onclick="downloadReport()">Download Report</button>
+      <button class="btn secondary" onclick="location.reload()">Start Over</button></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const CHECKS = [
+  { key:'who', label:'Names a specific accountable role',
+    test:(t)=>{
+      const specific = /\b(designated|named|chief|senior|head of|nominated)\b[^.]{0,25}\b(officer|manager|lead|reviewer|role)\b/i;
+      const generic = /\b(responsible|accountable|governance framework|the organisation|the firm)\b/i;
+      if(specific.test(t)) return {tier:'specified', why:'Found a specific named role (e.g. "designated officer").'};
+      if(generic.test(t)) return {tier:'vague', why:'Only generic accountability language found ("responsible," "the organisation") \u2014 no named role.', fix:'Name a specific role, e.g. "a designated AI safety officer."'};
+      return {tier:'not_specified', why:'No role or accountability language detected.', fix:'Add a specific accountable role.'};
+    }},
+  { key:'when', label:'Fixes a moment for review',
+    test:(t)=>{
+      const specific = /\b(\d+\s?(hours?|days?|minutes?))\b|\bimmediately\b|\breal[- ]time\b|\bprior to deployment\b|\bbefore\s+\w+\s+(is|are)\s+(deployed|released|sent)/i;
+      const vague = /\b(regularly|periodically|ongoing|as appropriate|from time to time)\b/i;
+      if(specific.test(t)) return {tier:'specified', why:'Found a concrete timing marker.'};
+      if(vague.test(t)) return {tier:'vague', why:'Only vague timing language found ("periodically," "ongoing").', fix:'Replace with a fixed trigger point, e.g. "within 24 hours of deployment."'};
+      return {tier:'not_specified', why:'No timing language detected.', fix:'Specify when review should happen.'};
+    }},
+  { key:'how', label:'Defines a concrete signal or threshold',
+    test:(t)=>{
+      const specific = /\b\d+\s?%|\b\d+\s?(incidents|complaints|errors|cases)\b|\bthreshold\b.*\b\d+/i;
+      const vague = /\b(significant|material|substantial|notable)\b/i;
+      if(specific.test(t)) return {tier:'specified', why:'Found a numeric threshold or concrete trigger.'};
+      if(vague.test(t)) return {tier:'vague', why:'Only qualitative language found ("significant," "material").', fix:'Add a measurable threshold, e.g. "when confidence falls below 90%."'};
+      return {tier:'not_specified', why:'No threshold language detected.', fix:'Define what should trigger attention.'};
+    }},
+  { key:'authority', label:'Specifies reviewer authority to act',
+    test:(t)=>{
+      const strong = /\b(override|pause|halt|suspend|veto|stop|intervene)\b/i;
+      const soft = /\b(may raise|can flag|recommend|advise)\b/i;
+      if(strong.test(t)) return {tier:'specified', why:'Found explicit authority to act (e.g. "pause," "override").'};
+      if(soft.test(t)) return {tier:'vague', why:'Only soft language found ("may raise," "recommend").', fix:'Give explicit authority, e.g. "with authority to pause the system."'};
+      return {tier:'not_specified', why:'No authority language detected.', fix:'State what the reviewer can actually do.'};
+    }},
+  { key:'scope', label:'Addresses systems with no clear sector owner',
+    test:(t)=>{
+      const broad = /\b(any (ai|automated|algorithmic) system)\b|\bregardless of sector\b|\birrespective of\b/i;
+      if(broad.test(t)) return {tier:'specified', why:'Found broad, sector-agnostic scope language.'};
+      return {tier:'not_specified', why:'No sector-agnostic language found.', fix:'Add scope language, e.g. "applies to any automated system regardless of sector."'};
+    }},
+  { key:'noise', label:'Distinguishes real issues from noise',
+    test:(t)=>{
+      const found = /\b(false positive|materiality|de minimis|material (impact|deviation))\b/i;
+      if(found.test(t)) return {tier:'specified', why:'Found language addressing materiality or false positives.'};
+      return {tier:'not_specified', why:'No materiality language found.', fix:'Add a materiality threshold so reviewers aren\u2019t flooded with false alarms.'};
+    }},
+  { key:'audit', label:'Requires an audit trail',
+    test:(t)=>{
+      const found = /\b(log(ged)?|record(ed)?|document(ed)?|audit trail|retained|traced)\b/i;
+      if(found.test(t)) return {tier:'specified', why:'Found audit/logging language.'};
+      return {tier:'not_specified', why:'No audit trail language detected.', fix:'Require reviews to be logged.'};
+    }},
+];
+
+const SCENARIOS = [
+  { id:'trading', label:'CASE 1 / MARKETS', title:'The Flash Crash', needsScope:false,
+    brief:'An automated trading system executes a rapid cascade of sell orders over three minutes, wiping 4% off a benchmark index before circuit breakers halt trading.' },
+  { id:'credit', label:'CASE 2 / CONSUMER FINANCE', title:'The Loan Denial', needsScope:false,
+    brief:'An AI credit-scoring tool automatically declines a small business loan. No human reviewed the decision before it was sent.' },
+  { id:'hiring', label:'CASE 3 / EMPLOYMENT DATA', title:'The Hiring Filter', needsScope:false,
+    brief:'An AI screening tool filters out a disproportionate share of candidates from one group, unnoticed for months.' },
+  { id:'chatbot', label:'CASE 4 / GENERAL PURPOSE AI', title:'The Chatbot Advice', needsScope:true,
+    brief:'A general-purpose AI assistant gives harmful advice, embedded in a product with no obvious sector regulator or owner.' },
+];
+
+const CONSEQUENCE = {
+  scope:()=> 'Your definition doesn\u2019t clearly state it applies to a case like this, with no obvious owner \u2014 so it may not reach this situation at all.',
+  who:()=> 'Without a named role, nobody in particular is watching here \u2014 it could slip through simply because it wasn\u2019t anyone\u2019s specific job.',
+  when:()=> 'Without a fixed review moment, this could go unreviewed for an extended stretch before anyone happens to look.',
+  how:()=> 'Without a defined threshold, a reviewer might not know this was worth flagging until after the damage was done.',
+};
+
+const VERDICT_COLOR = { specified:'#34D399', vague:'#E8B93D', not_specified:'#E1594A' };
+const VERDICT_LABEL = { specified:'SPECIFIED', vague:'VAGUE', not_specified:'NOT SPECIFIED' };
+const GATE_TITLE = { scope:'SCOPE', who:'WHO', when:'WHEN', how:'HOW' };
+
+let scanResults = {};
+let idx = 0, playing = true, timers = [], intervals = [], epoch = 0;
+
+function runScan(){
+  const t = document.getElementById('policyText').value;
+  scanResults = {};
+  CHECKS.forEach(c=> scanResults[c.key] = c.test(t));
+}
+
+function goPlayer(){
+  runScan();
+  document.getElementById('screen-input').classList.remove('active');
+  document.getElementById('screen-player').classList.add('active');
+  buildChapterbar();
+  idx = 0; playing = true;
+  renderScene();
+}
+
+function buildChapterbar(){
+  document.getElementById('chapterbar').innerHTML = SCENARIOS.map((s,i)=>`<div class="chapter" id="chap-${i}"><div class="fill"></div></div>`).join('');
+}
+function clearTimers(){
+  timers.forEach(t=>clearTimeout(t)); timers=[];
+  intervals.forEach(t=>clearInterval(t)); intervals=[];
+  epoch++; // invalidates any in-flight requestAnimationFrame loops
+}
+
+function gateOrderFor(s){ return s.needsScope ? ['scope','who','when','how'] : ['who','when','how']; }
+function reachFor(s){
+  const order = gateOrderFor(s);
+  for(const g of order){ if(scanResults[g].tier === 'not_specified') return g; }
+  return 'human';
+}
+
+function renderScene(){
+  clearTimers();
+  const s = SCENARIOS[idx];
+  document.getElementById('scenLabel').textContent = s.label;
+  document.getElementById('scenTitle').textContent = s.title;
+  document.getElementById('scenBrief').textContent = s.brief;
+  document.getElementById('nextBtn').textContent = idx < SCENARIOS.length-1 ? 'Next \u2192' : 'See Checklist \u2192';
+  document.getElementById('noteBox').classList.remove('show');
+
+  SCENARIOS.forEach((_,i)=>{
+    const f = document.getElementById(`chap-${i}`).querySelector('.fill');
+    f.style.transition='none'; f.style.width = i<idx ? '100%' : '0%';
+  });
+
+  const reach = reachFor(s);
+  const note = (reach==='human')
+    ? 'Your definition\u2019s WHO/WHEN/HOW hold up well enough here that the signal would likely reach a human \u2014 though "vague" gates below still mean real degradation.'
+    : CONSEQUENCE[reach]() + (scanResults[reach].fix ? ' Suggested fix: ' + scanResults[reach].fix : '');
+  document.getElementById('noteBox').textContent = note;
+
+  drawPath(s, reach);
+
+  if(playing){
+    runChapterFill();
+    timers.push(setTimeout(()=> document.getElementById('noteBox').classList.add('show'), 5200));
+    timers.push(setTimeout(()=>{
+      if(idx < SCENARIOS.length-1){ idx++; renderScene(); } else { goChecklist(); }
+    }, 8600));
+  } else {
+    document.getElementById('noteBox').classList.add('show');
+  }
+}
+
+function runChapterFill(){
+  const fill = document.getElementById(`chap-${idx}`).querySelector('.fill');
+  requestAnimationFrame(()=>{ fill.style.transition='width 8.6s linear'; fill.style.width='100%'; });
+}
+
+// CSS transitions keep running on their own even after JS timers are cleared,
+// so pausing/navigating mid-scene must explicitly freeze the in-flight fill bar.
+function freezeChapterFill(){
+  const chap = document.getElementById(`chap-${idx}`);
+  if(!chap) return;
+  const fill = chap.querySelector('.fill');
+  const current = getComputedStyle(fill).width;
+  fill.style.transition = 'none';
+  fill.style.width = current;
+}
+
+function drawPath(s, reach){
+  const svg = document.getElementById('pathsvg');
+  const order = gateOrderFor(s);
+  const nodes = ['event', ...order, 'human'];
+  const n = nodes.length;
+  const xFor = (i)=> 40 + i * ((600-40)/(n-1));
+  const Y = 70;
+
+  let parts = `<defs>
+    <filter id="glow" x="-120%" y="-120%" width="340%" height="340%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>`;
+  parts += `<line x1="${xFor(0)}" y1="${Y}" x2="${xFor(n-1)}" y2="${Y}" stroke="#2A3440" stroke-width="2" stroke-dasharray="4 5"/>`;
+  parts += `<line id="trail" x1="${xFor(0)}" y1="${Y}" x2="${xFor(0)}" y2="${Y}" stroke="#5B8DEF" stroke-width="3" stroke-linecap="round" opacity="0.55" filter="url(#glow)"/>`;
+  nodes.forEach((node,i)=>{
+    const x = xFor(i);
+    parts += `<circle cx="${x}" cy="${Y}" r="5" fill="#141A22" stroke="#4A5566" stroke-width="1.5"/>`;
+    const label = node==='event' ? 'EVENT' : node==='human' ? 'HUMAN' : GATE_TITLE[node];
+    parts += `<text class="gate-label" x="${x}" y="${Y+26}" text-anchor="middle">${label}</text>`;
+    if(order.includes(node)){
+      parts += `<text class="gate-verdict" id="verdict-${node}" x="${x}" y="${Y-16}" text-anchor="middle" fill="${VERDICT_COLOR[scanResults[node].tier]}">${VERDICT_LABEL[scanResults[node].tier]}</text>`;
+    }
+    if(node==='human'){
+      parts += `<text class="gate-verdict" id="verdict-human" x="${x}" y="${Y-16}" text-anchor="middle"></text>`;
+    }
+  });
+  parts += `<circle id="pulse" cx="${xFor(0)}" cy="${Y}" r="7" fill="#5B8DEF" filter="url(#glow)"/>`;
+  svg.innerHTML = parts;
+
+  const posOf = (node)=> xFor(nodes.indexOf(node));
+
+  if(!playing){
+    const worst = order.reduce((w,g)=> scanResults[g].tier==='not_specified' ? 'not_specified' : (scanResults[g].tier==='vague' && w!=='not_specified' ? 'vague' : w), 'specified');
+    const pulseEl = document.getElementById('pulse');
+    pulseEl.setAttribute('cx', posOf('human'));
+    pulseEl.setAttribute('fill', worst==='not_specified' ? '#E1594A' : worst==='vague' ? '#E8B93D' : '#5B8DEF');
+    pulseEl.style.opacity = worst==='not_specified' ? 0.45 : worst==='vague' ? 0.75 : 1;
+    const trailEl = document.getElementById('trail');
+    trailEl.setAttribute('x2', posOf('human'));
+    trailEl.setAttribute('stroke', worst==='not_specified' ? '#E1594A' : worst==='vague' ? '#E8B93D' : '#5B8DEF');
+    order.forEach(g=> document.getElementById(`verdict-${g}`).style.opacity = 1);
+    const hl = document.getElementById('verdict-human');
+    if(hl){
+      hl.style.opacity = 1;
+      hl.setAttribute('fill', worst==='not_specified' ? '#E1594A' : worst==='vague' ? '#E8B93D' : '#34D399');
+      hl.textContent = worst==='not_specified' ? 'ARRIVES BROKEN' : worst==='vague' ? 'ARRIVES DEGRADED' : 'ARRIVES CLEAN';
+    }
+    return;
+  }
+  animatePulse(nodes, order, reach, posOf, Y);
+}
+
+// small decorative "impact" ping at a node — purely visual, safe to leave
+// unremoved since the next drawPath() call replaces the whole svg innerHTML anyway
+function spawnBurst(svg, x, y, color, isArrival){
+  const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  ring.setAttribute('cx', x); ring.setAttribute('cy', y); ring.setAttribute('r', 5);
+  ring.setAttribute('fill', 'none');
+  ring.setAttribute('stroke', color);
+  ring.setAttribute('class', 'impact-burst' + (isArrival ? ' arrival' : ''));
+  svg.appendChild(ring);
+  setTimeout(()=>{ if(ring.parentNode) ring.remove(); }, isArrival ? 1100 : 700);
+}
+
+const easeInOutCubic = (t)=> t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
+
+function animatePulse(nodes, order, reach, posOf, Y){
+  const svg = document.getElementById('pathsvg');
+  const pulse = document.getElementById('pulse');
+  const trail = document.getElementById('trail');
+  pulse.style.opacity = 1; pulse.setAttribute('fill', '#5B8DEF');
+  const segDuration = 900;
+  const myEpoch = epoch; // segments abort themselves if a newer clearTimers() has fired
+  let t = 0;
+  let worst = 'specified'; // escalates: specified -> vague -> not_specified, never downgrades
+
+  const colorFor = (tier)=> tier==='not_specified' ? '#E1594A' : tier==='vague' ? '#E8B93D' : '#5B8DEF';
+  const opacityFor = (tier)=> tier==='not_specified' ? 0.45 : tier==='vague' ? 0.75 : 1;
+
+  for(let i=1;i<nodes.length;i++){
+    const node = nodes[i];
+    const fromX = posOf(nodes[i-1]);
+    const toX = posOf(node);
+    const isGate = order.includes(node);
+    const delay = t;
+
+    timers.push(setTimeout(()=>{
+      if(epoch !== myEpoch) return;
+      const start = performance.now();
+      function step(now){
+        if(epoch !== myEpoch) return;
+        const linearP = Math.min(1,(now-start)/segDuration);
+        const p = easeInOutCubic(linearP);
+        const cx = fromX+(toX-fromX)*p;
+        pulse.setAttribute('cx', cx);
+        trail.setAttribute('x2', cx);
+        if(linearP<1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }, delay));
+
+    timers.push(setTimeout(()=>{
+      if(epoch !== myEpoch) return;
+      if(isGate){
+        const label = document.getElementById(`verdict-${node}`);
+        if(label){ label.style.transition='opacity .3s ease'; label.style.opacity=1; }
+        const tier = scanResults[node].tier;
+        if(tier==='not_specified') worst='not_specified';
+        else if(tier==='vague' && worst!=='not_specified') worst='vague';
+
+        pulse.setAttribute('fill', colorFor(worst));
+        pulse.style.opacity = opacityFor(worst);
+        trail.setAttribute('stroke', colorFor(worst));
+        spawnBurst(svg, toX, Y, colorFor(worst), false);
+
+        if(tier!=='specified'){
+          const baseOp = opacityFor(worst);
+          const lowOp = tier==='not_specified' ? 0.12 : baseOp*0.4;
+          let f=0;
+          const flick=setInterval(()=>{
+            if(epoch !== myEpoch){ clearInterval(flick); return; }
+            pulse.style.opacity = f%2===0 ? lowOp : baseOp;
+            f++; if(f>5){ clearInterval(flick); pulse.style.opacity = baseOp; }
+          }, tier==='not_specified' ? 80 : 90);
+          intervals.push(flick);
+        }
+      } else if(node==='human'){
+        const finalLabel = document.getElementById('verdict-human');
+        if(finalLabel){
+          finalLabel.style.transition='opacity .3s ease';
+          finalLabel.style.opacity = 1;
+          finalLabel.setAttribute('fill', colorFor(worst));
+          finalLabel.textContent = worst==='not_specified' ? 'ARRIVES BROKEN' : worst==='vague' ? 'ARRIVES DEGRADED' : 'ARRIVES CLEAN';
+        }
+        pulse.classList.remove('arrive'); void pulse.offsetWidth; pulse.classList.add('arrive');
+        spawnBurst(svg, toX, Y, colorFor(worst), true);
+        timers.push(setTimeout(()=>{ if(epoch===myEpoch) spawnBurst(svg, toX, Y, colorFor(worst), true); }, 220));
+      }
+    }, delay+segDuration));
+
+    t += segDuration;
+  }
+}
+
+function togglePlay(){
+  playing = !playing;
+  document.getElementById('playPauseBtn').textContent = playing ? 'Pause' : 'Play';
+  if(playing) renderScene();
+  else { clearTimers(); freezeChapterFill(); document.getElementById('noteBox').classList.add('show'); }
+}
+function nextScene(){ clearTimers(); if(idx<SCENARIOS.length-1){ idx++; renderScene(); } else { goChecklist(); } }
+function prevScene(){ clearTimers(); if(idx>0){ idx--; renderScene(); } }
+
+function goChecklist(){
+  clearTimers();
+  document.getElementById('screen-player').classList.remove('active');
+  document.getElementById('screen-checklist').classList.add('active');
+  const box = document.getElementById('checklistItems');
+  box.innerHTML = CHECKS.map(c=>{
+    const r = scanResults[c.key];
+    const icon = r.tier==='specified' ? '\u2713' : r.tier==='vague' ? '\u25B2' : '\u2717';
+    return `
+      <div class="checklist-item">
+        <div class="head"><span class="mark ${r.tier}">${icon}</span> ${c.label}</div>
+        <div class="why">${r.why}</div>
+        ${r.fix ? `<div class="fix">Suggested fix: ${r.fix}</div>` : ''}
+      </div>`;
+  }).join('');
+  const specifiedCount = CHECKS.filter(c=> scanResults[c.key].tier==='specified').length;
+  document.getElementById('summaryLine').textContent = `${specifiedCount} of ${CHECKS.length} fully specified.`;
+}
+
+function downloadReport(){
+  const title = document.getElementById('policyTitle').value || 'Untitled policy';
+  const text = document.getElementById('policyText').value || '(no definition text provided)';
+  let report = `OVERSIGHT SIGNAL TEST \u2014 REPORT\nPolicy: ${title}\n\nYOUR DEFINITION:\n${text}\n\nSCENARIO WALKTHROUGH:\n`;
+  SCENARIOS.forEach(s=>{
+    const order = gateOrderFor(s);
+    report += `\n${s.title}\n${s.brief}\n`;
+    order.forEach(g=>{
+      const r = scanResults[g];
+      report += `  ${GATE_TITLE[g]}: ${VERDICT_LABEL[r.tier]} \u2014 ${r.why}${r.fix ? ' Suggested fix: '+r.fix : ''}\n`;
+    });
+  });
+  report += `\nCHECKLIST (auto-scored from keyword scan):\n`;
+  CHECKS.forEach(c=>{
+    const r = scanResults[c.key];
+    report += `[${r.tier==='specified' ? 'x' : ' '}] ${c.label} \u2014 ${VERDICT_LABEL[r.tier]}\n    ${r.why}${r.fix ? '\n    Suggested fix: '+r.fix : ''}\n`;
+  });
+  report += `\n---\nThis report is generated from an automated keyword scan \u2014 a first-pass signal, not a definitive legal or policy audit. Verify manually. Scenarios are fictionalized for illustration.\n`;
+  const blob = new Blob([report], {type:'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (title.replace(/[^a-z0-9]+/gi,'_') || 'oversight_report') + '.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
